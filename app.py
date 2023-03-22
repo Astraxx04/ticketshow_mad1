@@ -212,8 +212,17 @@ def user_registeration():
 @app.route('/userdashboard', methods =["GET", "POST"])
 @login_required
 def userdashboard():
-    flash("Loged in successfully")
-    return render_template('user_dashboard.html', title='User Dashboard')
+    venues = Venues.query.all()
+    venu=[]
+    for ven in venues:
+        shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+        show=[]
+        for sho in shows:
+            print(sho.show_name)
+            show.append({"name": sho.show_name, "time": sho.show_time})
+        venu.append({"name": ven.venue_name, "cards": show})
+    print(venu)
+    return render_template('user_dashboard.html', title='User Dashboard', data=venu)
 
 
 
