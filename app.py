@@ -5,7 +5,13 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import *
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_principal import *
 import sqlite3
+import json
+
+
+
+
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = 'super secret key'
@@ -26,6 +32,10 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     # return the user object for the user with the given user_id
     return Users.query.get(int(user_id))
+
+
+isAdmin = False
+
 
 
 #Models--------------------------------
@@ -157,6 +167,7 @@ def adminlogin():
         user = Users.query.filter_by(usr_name=form.adminname.data).first()
         if user and Users.isAdmin(user):
             if user.password == form.password.data:
+                isAdmin = True
                 login_user(user)
                 return redirect(url_for('admindashboard'))
             else:
@@ -193,7 +204,7 @@ def user_registeration():
         db.session.add(user)
         db.session.commit()
         login_user(user)
-        return redirect(url_for('userlogin'))
+        return redirect(url_for('login'))
     return render_template('registeration.html', title='Registeration', form=form)
 
 
@@ -201,6 +212,7 @@ def user_registeration():
 @app.route('/userdashboard', methods =["GET", "POST"])
 @login_required
 def userdashboard():
+    flash("Loged in successfully")
     return render_template('user_dashboard.html', title='User Dashboard')
 
 
@@ -240,6 +252,9 @@ def ticketbooking():
 @app.route('/userbookings', methods =["GET", "POST"])
 @login_required
 def userbookings():
+    print(current_user.user_id)
+    booking =  Bookings.query.filter_by(buser_id=current_user.user_id)
+    print(booking)
     return render_template('user_bookings.html')
 
 
