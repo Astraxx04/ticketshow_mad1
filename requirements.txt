@@ -1,0 +1,10 @@
+flask
+flask_sqlalchemy==1.4.18
+flask_wtf==1.1.1
+flask_login==0.6.2
+wtforms
+wtforms.validators
+werkzeug.security
+sqlite3
+Flask-Principal==0.4.0
+flask.ext==0.1

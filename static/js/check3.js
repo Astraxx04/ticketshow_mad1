@@ -6,7 +6,8 @@ const venuesContainer = document.getElementById("venues-container");
 // 	{ name: "Venue 2",  cards: [ { name: "Show 4", time: 30 }, { name: "Show 5", time: 25 }, { name: "Show 6", time: 40 } ] },
 // 	{ name: "Venue 3",  cards: [ { name: "Show 7", time: 30 }, { name: "Show 8", time: 25 }, { name: "Show 9", time: 40 }, { name: "Show 10", time: 25 } ] }
 // ];
-console.log(data);
+
+
 var venueData = data;
 const numVenueToPrint = venueData.length;
 

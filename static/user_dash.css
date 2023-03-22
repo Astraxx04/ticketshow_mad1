@@ -36,7 +36,7 @@
     top: 60%;
 }
 
-button{
+#book_button{
     margin-top: 50px;
     width: 100%;
     background-color: #ffffff;
@@ -48,7 +48,7 @@ button{
     border-radius: 10px;
     cursor: pointer;
 }
-button:hover{
+#book_button:hover{
     background-color: #202020;
     color: #ffffff;
 }
