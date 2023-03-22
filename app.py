@@ -149,6 +149,20 @@ class NewTicketBookingForm(FlaskForm):
     total = StringField('Total Price', validators=[DataRequired()])
 
 
+class UpdateShowForm(FlaskForm):
+    showname = StringField('Show Name', validators=[DataRequired()])
+    ratings = StringField('Show Rating', validators=[DataRequired()])
+    starttime = StringField('Show Time', validators=[DataRequired()])
+    tags = StringField('Show Tag', validators=[DataRequired()])
+    price = StringField('Show Price', validators=[DataRequired()])
+
+
+class UpdateVenueForm(FlaskForm):
+    venuename = StringField('Venue Name', validators=[DataRequired()])
+    venueplace = StringField('Venue Place', validators=[DataRequired()])
+    venueloc = StringField('Venue Location', validators=[DataRequired()])
+    venuecap = StringField('Venue Capacity', validators=[DataRequired()])
+
 
 #Routes--------------------------------------------------------------
 
@@ -296,20 +310,61 @@ def new_venue():
 
 
 
+@app.route('/updateshow', methods =["GET", "POST"])
+@login_required
+def updateshow():
+    form = UpdateShowForm()
+
+    if form.validate_on_submit():
+        sh_id = 1
+        show = Shows.query.filter(Shows.show_id==1).first()
+        show.show_name=form.showname.data
+        show.show_time=form.starttime.data
+        show.show_tag=form.tags.data
+        show.show_rating=form.ratings.data
+        show.show_price=form.price.data
+        db.session.commit()
+        return redirect(url_for('admindashboard'))
+    return render_template('update_show.html', form=form)
+
+
+
+
+@app.route('/updatevenue', methods =["GET", "POST"])
+@login_required
+def updatevenue():
+    form = UpdateVenueForm()
+
+    if form.validate_on_submit():
+        ve_id = 1
+        venue = Venues.query.filter(Venues.venue_id==1).first()
+        venue.venue_name=form.venuename.data
+        venue.venue_place=form.venueplace.data
+        venue.venue_location=form.venueloc.data
+        venue.venue_capacity=form.venuecap.data
+        db.session.commit()
+        return redirect(url_for('admindashboard'))
+    return render_template('update_venue.html', form=form)
+
+
+
+
+@app.route('/deleteshow', methods =["GET", "POST"])
+@login_required
+def deleteshow():
+    sh_id=1
+    show = Shows.query.filter(Shows.show_id==1).first()
+    db.session.delete(show)
+    db.session.commit()
+    print("successfully deleted")
+    return redirect(url_for('admindashboard'))
+
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-
-
-
-
-
-
-
 
 
 
