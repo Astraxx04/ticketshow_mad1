@@ -98,4 +98,5 @@ addChildBtn.addEventListener('click', () => {
     window.location.href = 'newvenue';
     venues+=1;
     sessionStorage.setItem('venue_no', venues + 1);
+    console.log(venues);
 });

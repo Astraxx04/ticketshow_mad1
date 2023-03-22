@@ -218,10 +218,8 @@ def userdashboard():
         shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
         show=[]
         for sho in shows:
-            print(sho.show_name)
             show.append({"name": sho.show_name, "time": sho.show_time})
         venu.append({"name": ven.venue_name, "cards": show})
-    print(venu)
     return render_template('user_dashboard.html', title='User Dashboard', data=venu)
 
 
@@ -235,11 +233,8 @@ def admindashboard():
         shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
         show=[]
         for sho in shows:
-            print(sho.show_name)
             show.append({"name": sho.show_name, "time": sho.show_time})
         venu.append({"name": ven.venue_name, "cards": show})
-    print(venu)
-
     return render_template('admin_dashboard.html', title='Admin Dashboard', data=venu)
 
 
@@ -262,9 +257,14 @@ def ticketbooking():
 @login_required
 def userbookings():
     print(current_user.user_id)
-    booking =  Bookings.query.filter_by(buser_id=current_user.user_id)
-    print(booking)
-    return render_template('user_bookings.html')
+    bookings = Bookings.query.filter(Bookings.buser_id==current_user.user_id)
+    data = []
+    for book in bookings:
+        ven = Venues.query.filter(book.bvenue_id==Venues.venue_id).first()
+        sho = Shows.query.filter(book.bshow_id==Shows.show_id).first()
+        data.append({"venue":ven.venue_name, "show":sho.show_name})
+        print(data)
+    return render_template('user_bookings.html', title='User Bookings', data=data)
 
 
 
