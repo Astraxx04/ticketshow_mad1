@@ -82,8 +82,7 @@ function createShows(x) {
 function addShow(element) {
     let cookie = element.id;
     window.location.href = 'newshow';
-    console.log(element.id);
-    sessionStorage.setItem('show_id', cookie);
+    sessionStorage.setItem('venue_id', cookie);
 }
 
 

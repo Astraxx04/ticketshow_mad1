@@ -138,6 +138,7 @@ class NewShowForm(FlaskForm):
     starttime = StringField('Show Time', validators=[DataRequired()])
     tags = StringField('Show Tag', validators=[DataRequired()])
     price = StringField('Show Price', validators=[DataRequired()])
+    venue = StringField()
 
 
 class NewTicketBookingForm(FlaskForm):
@@ -288,7 +289,9 @@ def new_show():
     form = NewShowForm()
 
     if form.validate_on_submit():
-        show = Shows(show_name=form.showname.data, show_time=form.starttime.data, show_tag=form.tags.data, show_rating=form.ratings.data, show_price=form.price.data)
+        # print(form.venue.data)
+        venue_id = int(form.venue.data[-1])
+        show = Shows(show_name=form.showname.data, show_time=form.starttime.data, show_tag=form.tags.data, show_rating=form.ratings.data, show_price=form.price.data, svenue_id=venue_id)
         db.session.add(show)
         db.session.commit()
         return redirect(url_for('admindashboard'))

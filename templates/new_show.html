@@ -40,6 +40,9 @@
             {{ form.tags(class="card-form__input", type="text", placeholder="Enter tags", id="show_tag") }}
             {{ form.price.label(class="card-form__label") }}
             {{ form.price(class="card-form__input", type="number", placeholder="Enter value", id="price", min="100") }}
+            <!-- {{ form.venue.label(class="card-form__label") }} -->
+            {{ form.venue(class="card-form__input", type="hidden", placeholder="Enter the venue name", id="venue_name") }}
+        
             
 
 
@@ -60,4 +63,5 @@
             </div>
         </form>
     </main>
+    <script src="../static/js/new_show.js"></script>
 {% endblock %}
