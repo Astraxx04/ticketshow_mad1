@@ -235,6 +235,7 @@ def userdashboard():
         for sho in shows:
             show.append({"name": sho.show_name, "time": sho.show_time})
         venu.append({"name": ven.venue_name, "cards": show})
+    print(venu)
     return render_template('user_dashboard.html', title='User Dashboard', data=venu)
 
 
@@ -375,4 +376,4 @@ def logout():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        app.run(debug=True)
+        app.run(debug=True, port=8000)
