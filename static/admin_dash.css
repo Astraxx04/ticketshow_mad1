@@ -52,6 +52,7 @@
     padding: 25px;
     margin: auto;
     margin-top: 50px;
+    position: relative;
 }
 
 .vcard h1 {
@@ -133,6 +134,17 @@
 
 .venuebuttons button {
     margin-right: 10px;
+    position: absolute;
+}
+
+#venbutdel {
+    right: 30px;
+    top: 15px;
+}
+
+#venbutupd {
+    right: 165px;
+    top: 15px;
 }
 
 .primary-btn {
