@@ -26,6 +26,10 @@ for (let i = 0; i < numVenueToPrint; i++) {
 	const vcardDataItem = venueData[vcardDataIndex];
 	vcard.innerHTML = `
 		<h1>${vcardDataItem.name}</h1>
+        <div class="venuebuttons" id="venueid">
+        <button class="primary-btn venbutdel" id="venbutdel" type="button">Delete Venue</button>
+        <button class="primary-btn venbutupd" id="venbutupd" type="button" href="{{ url_for('updatevenue') }}">Update Venue</button>
+        </div>
 	`;
 
 	// Add the card element to the card container
@@ -34,7 +38,7 @@ for (let i = 0; i < numVenueToPrint; i++) {
 }
 const vcard = document.createElement("div");
 vcard.classList.add("vvcard");
-vcard.innerHTML = `<button class="venueadd_button" id="venueadd_button" href=""{{ url_for('newvenue') }}""><img class="add-venue-img" id="add-venue-img" src="static/images/plus_icon.png" alt="Add a new Show"></button>`;
+vcard.innerHTML = `<button class="venueadd_button" id="venueadd_button" href="{{ url_for('newvenue') }}"><img class="add-venue-img" id="add-venue-img" src="static/images/plus_icon.png" alt="Add a new Show"></button>`;
 vcard.setAttribute('id', 'plusBtnvenue');
 // Add the card element to the card container
 venuesContainer.appendChild(vcard);
@@ -99,3 +103,8 @@ addChildBtn.addEventListener('click', () => {
     sessionStorage.setItem('venue_no', venues + 1);
     console.log(venues);
 });
+
+
+// document.getElementById("venbutdel").onclick = function () {
+//     location.href = "{{ url_for('user_registeration') }}";
+// }
