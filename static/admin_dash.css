@@ -42,7 +42,8 @@
     justify-content: center;
     align-items: center;
 }
-  
+
+/* The main div which forms the card for each venue */
 .vcard {
     width: 90%;
     background-color: rgba(255,255,255,0.13);
@@ -131,17 +132,19 @@
     margin-bottom: 40px;
 }
 
-
+/* The div class which stores the update and delete button */
 .venuebuttons button {
     margin-right: 10px;
     position: absolute;
 }
 
+/* The venue delete button */
 #venbutdel {
     right: 30px;
     top: 15px;
 }
 
+/* The venue update button */
 #venbutupd {
     right: 165px;
     top: 15px;
