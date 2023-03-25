@@ -186,9 +186,10 @@ def adminlogin():
                 login_user(user)
                 return redirect(url_for('admindashboard'))
             else:
-                return '<h1>Invalid Password</h1>'
-
-
+                flash('Invalid credentials!!')
+                return redirect(url_for('adminlogin'))
+        else:
+            flash('User not found!')
     return render_template('admin_login.html', title='Admin Login', form=form)
 
 
@@ -204,7 +205,11 @@ def login():
                 login_user(user)
                 return redirect(url_for('userdashboard'))
             else:
+                flash('Invalid credentials!!')
+                return redirect(url_for('userlogin'))
                 return '<h1>Invalid Password</h1>'
+        else:
+            flash('User not found!')
     return render_template('user_login.html', title='User Login', form=form)
 
 
@@ -220,6 +225,7 @@ def user_registeration():
         db.session.commit()
         login_user(user)
         return redirect(url_for('login'))
+    flash('Something went wrong!')
     return render_template('registeration.html', title='Registeration', form=form)
 
 
