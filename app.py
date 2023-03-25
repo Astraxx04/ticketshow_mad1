@@ -225,7 +225,6 @@ def user_registeration():
         db.session.commit()
         login_user(user)
         return redirect(url_for('login'))
-    flash('Something went wrong!')
     return render_template('registeration.html', title='Registeration', form=form)
 
 
