@@ -86,14 +86,14 @@ class Shows(db.Model):
     show_tag = db.Column(db.String(50), nullable = False)
     show_rating = db.Column(db.Integer(), nullable = False)
     show_price = db.Column(db.Integer(), nullable = False)
-    svenue_id = db.Column(db.Integer(), db.ForeignKey('venues.venue_id'))
+    svenue_id = db.Column(db.Integer(), db.ForeignKey('venues.venue_id', ondelete="CASCADE"))
 
     def __repr__(self):
         return "<Shows %r>" % self.show_id
 
 class Bookings(db.Model):
     booking_id = db.Column(db.Integer(), primary_key = True)
-    buser_id = db.Column(db.Integer(), db.ForeignKey('users.user_id'))
+    buser_id = db.Column(db.Integer(), db.ForeignKey('users.user_id', ondelete="CASCADE"))
     bvenue_id = db.Column(db.Integer(), db.ForeignKey('venues.venue_id'))
     bshow_id = db.Column(db.Integer(), db.ForeignKey('shows.show_id'))
     num_tickets = db.Column(db.Integer(), nullable = False)
@@ -356,9 +356,26 @@ def updatevenue():
 @app.route('/deleteshow', methods =["GET", "POST"])
 @login_required
 def deleteshow():
-    sh_id=1
-    show = Shows.query.filter(Shows.show_id==1).first()
+    sh_id=6
+    print(Shows.query.count())
+    show = Shows.query.filter(Shows.show_id==sh_id).first()
     db.session.delete(show)
+    for i in range(sh_id, Shows.query.count()):
+        show = Shows.query.filter(Shows.show_id==i+1).first()
+        show.show_id=i-1
+    print(Shows.query.count())
+    db.session.commit()
+    print("successfully deleted")
+    return redirect(url_for('admindashboard'))
+
+
+
+@app.route('/deletevenue', methods =["GET", "POST"])
+@login_required
+def deletevenue():
+    sh_id=1
+    venue = Venues.query.filter(Venues.venue_id==6).first()
+    db.session.delete(venue)
     db.session.commit()
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
