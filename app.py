@@ -164,6 +164,11 @@ class UpdateVenueForm(FlaskForm):
     venueloc = StringField('Venue Location', validators=[DataRequired()])
     venuecap = StringField('Venue Capacity', validators=[DataRequired()])
 
+class DataForm(FlaskForm):
+    venue_name = StringField()
+    show_name = StringField()
+
+
 
 #Routes--------------------------------------------------------------
 
@@ -232,6 +237,8 @@ def user_registeration():
 @app.route('/userdashboard', methods =["GET", "POST"])
 @login_required
 def userdashboard():
+    form = DataForm()
+
     venues = Venues.query.all()
     venu=[]
     for ven in venues:
@@ -241,6 +248,11 @@ def userdashboard():
             show.append({"name": sho.show_name, "time": sho.show_time})
         venu.append({"name": ven.venue_name, "cards": show})
     print(venu)
+
+    if form.validate_on_submit():
+        venue_name = form
+        show_name = 0
+
     return render_template('user_dashboard.html', title='User Dashboard', data=venu)
 
 
@@ -290,7 +302,7 @@ def userbookings():
 
 
 @app.route('/newshow', methods =["GET", "POST"])
-@login_required
+@login_requiredWS
 def new_show():
     form = NewShowForm()
 
