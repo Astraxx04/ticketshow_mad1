@@ -9,6 +9,6 @@ console.log(sessionStorage.getItem('ushow_showid'));
 
 
 function showdelete(){
-    document.getElementById("venue_id").value = sessionStorage.getItem('uvenue_id');
+    document.getElementById("show_id").value = sessionStorage.getItem('ushow_showid');
     location.href='deleteshow'
 }

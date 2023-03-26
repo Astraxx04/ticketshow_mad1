@@ -175,9 +175,6 @@ class DataForm(FlaskForm):
 
 
 
-class DeleteVenue(FlaskForm):
-    delvenueid = StringField()
-
 #Routes--------------------------------------------------------------
 
 
@@ -401,14 +398,11 @@ def updatevenue():
 @app.route('/deleteshow', methods =["GET", "POST"])
 @login_required
 def deleteshow():
-    sh_id=6
-    print(Shows.query.count())
+    form = UpdateShowForm()
+    sh_id = form.showid.data
+    print(form.showid.data)
     show = Shows.query.filter(Shows.show_id==sh_id).first()
     db.session.delete(show)
-    for i in range(sh_id, Shows.query.count()):
-        show = Shows.query.filter(Shows.show_id==i+1).first()
-        show.show_id=i-1
-    print(Shows.query.count())
     db.session.commit()
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
@@ -419,7 +413,7 @@ def deleteshow():
 @login_required
 def deletevenue():
     form = UpdateVenueForm()
-    ve_id=form.venueid.data
+    ve_id = form.venueid.data
     print(form.venueid.data)
     venue = Venues.query.filter(Venues.venue_id==ve_id).first()
     db.session.delete(venue)
