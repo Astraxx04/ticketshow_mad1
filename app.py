@@ -103,12 +103,19 @@ class Bookings(db.Model):
         return "<Bookings %r%r%r>" % self.venue_id % self.show_id % self.booking_id
 
 class Booked(db.Model):
+    booked_id = db.Column(db.Integer(), primary_key = True)
     show_name = db.Column(db.String(50), primary_key = True, nullable = False)
     venue_name = db.Column(db.String(50), primary_key = True, nullable = False)
     seats_booked = db.Column(db.Integer(), default = 0)
 
 
-
+class Ratings(db.Model):
+    ratings_id = db.Column(db.Integer(), primary_key = True)
+    user_id = db.Column(db.Integer())
+    show_name = db.Column(db.String(50), nullable = False)
+    venue_name = db.Column(db.String(50), nullable = False)
+    ratings = db.Column(db.Integer(), default = 0)
+    
 
 #Forms----------------------------------------------------------------
 
