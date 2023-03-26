@@ -287,6 +287,10 @@ def ticketbooking():
             venue_id = (Venues.query.filter_by(venue_name = booking_venue).first_or_404()).venue_id
             booking = Bookings(num_tickets=form.numseats.data, bvenue_id=venue_id, bshow_id=show_id, total_price=form.total.data, buser_id=current_user.user_id)
             db.session.add(booking)
+            
+            booked = Booked(show_name=booking_show, venue_name=booking_venue, seats_booked=form.numseats.data)
+            db.session.add(booked)
+            
             db.session.commit()
             flash("Booking confirmed!")
             return redirect(url_for('userdashboard'))
