@@ -38,7 +38,7 @@
             <p class="time" id="time"> Timings: {{ booking_detail['show_time'] }}</p>
             {{ form.hidden_tag() }}
             {{ form.numseats.label(class="card-form__label") }}
-            {{ form.numseats(class="card-form__input", type="number", placeholder="Enter the number of seats", id="num_seats", min="0", onkeyup="tot_price()") }}
+            {{ form.numseats(class="card-form__input", type="number", max=booking_detail['available_seats'], placeholder="Enter the number of seats", id="num_seats", min="0", onkeyup="tot_price()") }}
             {{ form.price.label(class="card-form__label") }}
             {{ form.price(class="card-form__input", type="number", id="price", value="300", readonly="True") }}
             {{ form.total.label(class="card-form__label") }}

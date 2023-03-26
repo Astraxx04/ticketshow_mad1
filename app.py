@@ -287,8 +287,6 @@ def ticketbooking():
             booking = Bookings(num_tickets=form.numseats.data, total_price=form.total.data)
             db.session.add(booking)
             db.session.commit()
-
-            seats
             return redirect(url_for('userdashboard'))
         
         booking_venue = session['venue_name']
@@ -296,21 +294,22 @@ def ticketbooking():
         show_time = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_time
         total_seats = (Venues.query.filter_by(venue_name = booking_venue).first_or_404()).venue_capacity
 
-        ticket = Booked(show_name = booking_show, venue_name = booking_venue, seats_booked = total_seats)
+        # ticket = Booked(show_name = booking_show, venue_name = booking_venue, seats_booked = total_seats)
         # db.session.add(ticket)
         # db.session.commit()
 
-        # Edit the next line to incorporate booked_seats
-        # booked_seats = Booked.query.filter_by(show_name = booking_show).all()
         booked_seats = Booked.query.filter_by(show_name = booking_show).first()
-        print(booked_seats.seats_booked)
-        # if (booked_seats == N):
-        #     booked_seats = 0
-        available_seats = total_seats - booked_seats.seats_booked
+        if (booked_seats == None):
+            booked_seats = 0
+        else:
+            booked_seats = booked_seats.seats_booked
+        available_seats = total_seats - booked_seats
 
         booking_detail = {'booking_venue':booking_venue, 'booking_show':booking_show, 'show_time':show_time, 'total_seats':total_seats, 'available_seats':available_seats}
         return render_template('ticket_book.html', title='Ticket Booking', form=form, booking_detail=booking_detail)
-    except:
+    except Exception as e:
+        # For Debugging purposes
+        print(e)
         flash('Something went wrong!')
         return redirect(url_for('userdashboard'))
 
