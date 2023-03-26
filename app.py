@@ -284,9 +284,10 @@ def ticketbooking():
         form = NewTicketBookingForm()
 
         if form.validate_on_submit():
-            booking = Bookings(num_tickets=form.numseats.data, total_price=form.total.data)
+            booking = Bookings(num_tickets=form.numseats.data, total_price=form.total.data, buser_id=current_user.user_id)
             db.session.add(booking)
             db.session.commit()
+            flash("Booking confirmed!")
             return redirect(url_for('userdashboard'))
         
         booking_venue = session['venue_name']
