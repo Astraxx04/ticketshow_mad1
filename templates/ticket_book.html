@@ -40,7 +40,7 @@
             {{ form.numseats.label(class="card-form__label") }}
             {{ form.numseats(class="card-form__input", type="number", max=booking_detail['available_seats'], placeholder="Enter the number of seats", id="num_seats", min="0", onkeyup="tot_price()") }}
             {{ form.price.label(class="card-form__label") }}
-            {{ form.price(class="card-form__input", type="number", id="price", value="300", readonly="True") }}
+            {{ form.price(class="card-form__input", type="number", id="price", value=booking_detail['price'], readonly="True") }}
             {{ form.total.label(class="card-form__label") }}
             {{ form.total(class="card-form__input", type="number", id="total", value="0", readonly="True") }}
             

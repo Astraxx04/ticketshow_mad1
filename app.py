@@ -297,7 +297,7 @@ def ticketbooking():
         
         show_time = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_time
         total_seats = (Venues.query.filter_by(venue_name = booking_venue).first_or_404()).venue_capacity
-
+        show_price = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_price
         # ticket = Booked(show_name = booking_show, venue_name = booking_venue, seats_booked = total_seats)
         # db.session.add(ticket)
         # db.session.commit()
@@ -309,7 +309,7 @@ def ticketbooking():
             booked_seats = booked_seats.seats_booked
         available_seats = total_seats - booked_seats
 
-        booking_detail = {'booking_venue':booking_venue, 'booking_show':booking_show, 'show_time':show_time, 'total_seats':total_seats, 'available_seats':available_seats}
+        booking_detail = {'booking_venue':booking_venue, 'booking_show':booking_show, 'show_time':show_time, 'total_seats':total_seats, 'available_seats':available_seats, 'price':show_price}
         return render_template('ticket_book.html', title='Ticket Booking', form=form, booking_detail=booking_detail)
     except Exception as e:
         # For Debugging purposes
