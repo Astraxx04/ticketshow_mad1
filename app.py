@@ -103,12 +103,10 @@ class Bookings(db.Model):
         return "<Bookings %r%r%r>" % self.venue_id % self.show_id % self.booking_id
 
 class Booked(db.Model):
-    random_id = db.Column(db.Integer(), unique = True, nullable = False)
     show_name = db.Column(db.String(50), primary_key = True, nullable = False)
+    venue_name = db.Column(db.String(50), primary_key = True, nullable = False)
     seats_booked = db.Column(db.Integer(), default = 0)
 
-    def __repr__(self):
-        return "<Booked %r>" % self.random_id
 
 
 
@@ -254,8 +252,7 @@ def userdashboard():
         for sho in shows:
             show.append({"name": sho.show_name, "time": sho.show_time})
         venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
-    print(venu)
-
+    
     form = DataForm()
     if form.validate_on_submit():
         session['venue_name'] = form.booking_venue.data
@@ -290,20 +287,26 @@ def ticketbooking():
             booking = Bookings(num_tickets=form.numseats.data, total_price=form.total.data)
             db.session.add(booking)
             db.session.commit()
+
+            seats
             return redirect(url_for('userdashboard'))
         
         booking_venue = session['venue_name']
         booking_show = session['show_name']
         show_time = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_time
-        # show_time = (db.one_or_404(db.select(Venues).filter_by(venue_name=booking_venue)))
         total_seats = (Venues.query.filter_by(venue_name = booking_venue).first_or_404()).venue_capacity
+
+        ticket = Booked(show_name = booking_show, venue_name = booking_venue, seats_booked = total_seats)
+        # db.session.add(ticket)
+        # db.session.commit()
 
         # Edit the next line to incorporate booked_seats
         # booked_seats = Booked.query.filter_by(show_name = booking_show).all()
-        booked_seats = None
-        if (booked_seats == None):
-            booked_seats = 0
-        available_seats = total_seats - booked_seats
+        booked_seats = Booked.query.filter_by(show_name = booking_show).first()
+        print(booked_seats.seats_booked)
+        # if (booked_seats == N):
+        #     booked_seats = 0
+        available_seats = total_seats - booked_seats.seats_booked
 
         booking_detail = {'booking_venue':booking_venue, 'booking_show':booking_show, 'show_time':show_time, 'total_seats':total_seats, 'available_seats':available_seats}
         return render_template('ticket_book.html', title='Ticket Booking', form=form, booking_detail=booking_detail)
@@ -321,7 +324,6 @@ def userbookings():
         ven = Venues.query.filter(book.bvenue_id==Venues.venue_id).first()
         sho = Shows.query.filter(book.bshow_id==Shows.show_id).first()
         data.append({"venue":ven.venue_name, "show":sho.show_name})
-        print(data)
     return render_template('user_bookings.html', title='User Bookings', data=data)
 
 

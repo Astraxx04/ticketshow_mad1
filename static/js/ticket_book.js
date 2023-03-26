@@ -1,5 +1,3 @@
-
-
 function tot_price() 
 {
     var seats = document.getElementById('num_seats').value;
