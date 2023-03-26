@@ -206,8 +206,7 @@ def login():
                 return redirect(url_for('userdashboard'))
             else:
                 flash('Invalid credentials!!')
-                return redirect(url_for('userlogin'))
-                return '<h1>Invalid Password</h1>'
+                return redirect(url_for('login'))
         else:
             flash('User not found!')
     return render_template('user_login.html', title='User Login', form=form)

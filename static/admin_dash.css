@@ -140,14 +140,14 @@
 
 /* The venue delete button */
 #venbutdel {
-    right: 30px;
-    top: 15px;
+    right: 20px;
+    top: 25px;
 }
 
 /* The venue update button */
 #venbutupd {
-    right: 165px;
-    top: 15px;
+    right: 175px;
+    top: 25px;
 }
 
 .primary-btn {
@@ -155,10 +155,9 @@
     background-color: #002757;
     padding: 0.7em 1em;
     border: 1px solid;
-    border-radius: var(--radius-2);
+    border-radius: 8px;
     cursor: pointer;
     float: right;
-    border-radius: 5px;
 }
 .primary-btn:hover {
     color: #002757;
