@@ -308,7 +308,8 @@ def ticketbooking():
         booking_detail = {'booking_venue':booking_venue, 'booking_show':booking_show, 'show_time':show_time, 'total_seats':total_seats, 'available_seats':available_seats}
         return render_template('ticket_book.html', title='Ticket Booking', form=form, booking_detail=booking_detail)
     except:
-        return '<H1>Something Went Wrong!!</H1>'
+        flash('Something went wrong!')
+        return redirect(url_for('userdashboard'))
 
 
 @app.route('/userbookings', methods =["GET", "POST"])
@@ -428,6 +429,8 @@ def deletevenue():
 @app.route('/logout')
 @login_required
 def logout():
+    session.pop('venue_name', None)
+    session.pop('show_name', None)
     logout_user()
     return redirect(url_for('index'))
 
