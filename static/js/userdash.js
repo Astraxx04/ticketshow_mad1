@@ -49,7 +49,7 @@ function createShows(x, venue_name) {
         card.innerHTML = `
             <h2>${cardDataItem.name}</h2>
             <p>Timings: ${cardDataItem.time}</p>
-            <button class="bookings_button" id="bookings_button${x+1}" onclick="bookings(this, '${cardDataItem.name}', '${venue_name}')">Book Tickets</button>
+            <button class="bookings_button" id="bookings_button${x+1}" type="submit" onclick="bookings(this, '${cardDataItem.name}', '${venue_name}')">Book Tickets</button>
         `;
 
         // Add the card element to the card container

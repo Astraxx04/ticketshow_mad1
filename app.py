@@ -237,8 +237,6 @@ def user_registeration():
 @app.route('/userdashboard', methods =["GET", "POST"])
 @login_required
 def userdashboard():
-    form = DataForm()
-
     venues = Venues.query.all()
     venu=[]
     for ven in venues:
@@ -249,10 +247,12 @@ def userdashboard():
         venu.append({"name": ven.venue_name, "cards": show})
     print(venu)
 
+    form = DataForm()
     if form.validate_on_submit():
-        venue_name = form
-        show_name = 0
-
+        venue_name = form.venue_name.data
+        show_name = form.show_name.data
+        print()
+        print(venue_name, show_name, end="\n\n")
     return render_template('user_dashboard.html', title='User Dashboard', data=venu)
 
 
@@ -302,7 +302,7 @@ def userbookings():
 
 
 @app.route('/newshow', methods =["GET", "POST"])
-@login_requiredWS
+@login_required
 def new_show():
     form = NewShowForm()
 

@@ -34,6 +34,31 @@
     <div class="venues" id="venues-container">
     </div>
 
+    <main class="main page__main">
+        <form class="card-form", method="POST" action="/userdashboard">
+            {{ form.hidden_tag() }}
+            <!-- {{ form.numseats.label(class="card-form__label") }} -->
+            <!-- {{ form.numseats(class="card-form__input", type="number", placeholder="Enter the number of seats", id="num_seats", min="0", onkeyup="tot_price()") }} -->
+            <!-- {{ form.price.label(class="card-form__label") }} -->
+            {{ form.venue_name(class="card-form__input", type="hidden", id="venue_name", value="Apple") }}
+            <!-- {{ form.total.label(class="card-form__label") }} -->
+            {{ form.show_name(class="card-form__input", type="hidden", id="show_name", value="Banana") }}
+            
+            
+
+            <!-- <label class="card-form__label" for="num_seats">Number</label>
+            <input class="card-form__input" id="num_seats" name="num_seats" placeholder="Enter the number of seats" type="number" min="0" onkeyup="tot_price()"/>
+            <label class="card-form__label" for="price">Price</label>
+            <input class="card-form__input" id="price" name="price" value="300" type="number" readonly/>
+            <label class="card-form__label" for="total">Total</label>
+            <input class="card-form__input" id="total" name="total" type="number" value="0" readonly/> -->
+            <!-- </div> -->
+            <!-- <div class="card-form__footer">
+            <button class="primary-btn" type="submit">Confirm Booking</button>
+            </div> -->
+        </form>
+    </main>
+
     <link rel="stylesheet" href="../static/user_dash.css">
     <script>
         var data = {{ data|tojson }}
