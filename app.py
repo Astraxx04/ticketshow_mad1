@@ -156,6 +156,7 @@ class UpdateShowForm(FlaskForm):
     starttime = StringField('Show Time', validators=[DataRequired()])
     tags = StringField('Show Tag', validators=[DataRequired()])
     price = StringField('Show Price', validators=[DataRequired()])
+    showid = StringField()
 
 
 class UpdateVenueForm(FlaskForm):
@@ -164,6 +165,10 @@ class UpdateVenueForm(FlaskForm):
     venueloc = StringField('Venue Location', validators=[DataRequired()])
     venuecap = StringField('Venue Capacity', validators=[DataRequired()])
     venueid = StringField()
+
+
+class DeleteVenue(FlaskForm):
+    delvenueid = StringField()
 
 #Routes--------------------------------------------------------------
 
@@ -253,7 +258,7 @@ def admindashboard():
         shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
         show=[]
         for sho in shows:
-            show.append({"name": sho.show_name, "time": sho.show_time})
+            show.append({"name": sho.show_name, "time": sho.show_time, "showid": sho.show_id, "tag": sho.show_tag, "price": sho.show_price, "rating": sho.show_rating})
         venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity, "venueid": ven.venue_id})
     return render_template('admin_dashboard.html', title='Admin Dashboard', data=venu)
 
@@ -324,8 +329,8 @@ def updateshow():
     form = UpdateShowForm()
 
     if form.validate_on_submit():
-        sh_id = 1
-        show = Shows.query.filter(Shows.show_id==1).first()
+        sh_id = form.showid.data
+        show = Shows.query.filter(Shows.show_id==sh_id).first()
         show.show_name=form.showname.data
         show.show_time=form.starttime.data
         show.show_tag=form.tags.data
@@ -377,8 +382,10 @@ def deleteshow():
 @app.route('/deletevenue', methods =["GET", "POST"])
 @login_required
 def deletevenue():
-    sh_id=1
-    venue = Venues.query.filter(Venues.venue_id==6).first()
+    form = UpdateVenueForm()
+    ve_id=form.venueid.data
+    print(form.venueid.data)
+    venue = Venues.query.filter(Venues.venue_id==ve_id).first()
     db.session.delete(venue)
     db.session.commit()
     print("successfully deleted")

@@ -24,11 +24,10 @@ for (let i = 0; i < numVenueToPrint; i++) {
 	// Add the card data to the element
 	const vcardDataIndex = i % venueData.length; // Use modulo to cycle through the data
 	const vcardDataItem = venueData[vcardDataIndex];
-    console.log(vcardDataItem.venueid);
 	vcard.innerHTML = `
 		<h1>${vcardDataItem.name}</h1>
         <div class="venuebuttons" id="venueid">
-        <button class="primary-btn venbutupd" id="venbutupd${i+1}" onClick="updel(this, '${vcardDataItem.name}', '${vcardDataItem.place}', '${vcardDataItem.location}',  '${vcardDataItem.capacity}', '${vcardDataItem.venueid}')">Update/Delete</button>
+        <button class="primary-btn venbutupd" id="venbutupd${i+1}" onClick="updelvenue(this, '${vcardDataItem.name}', '${vcardDataItem.place}', '${vcardDataItem.location}', '${vcardDataItem.capacity}', '${vcardDataItem.venueid}')">Update/Delete</button>
         </div>
 	`;
 
@@ -45,7 +44,7 @@ venuesContainer.appendChild(vcard);
 
 
 
-function updel(id, name, place, vlocation, vcapacity, vid){
+function updelvenue(id, name, place, vlocation, vcapacity, vid){
     location.href = 'updatevenue';
     sessionStorage.setItem('uvenue_name', name);
     sessionStorage.setItem('uvenue_place', place);
@@ -75,10 +74,11 @@ function createShows(x) {
         // Add the card data to the element
         const cardDataIndex = i; // Use modulo to cycle through the data
         const cardDataItem = venueData[x].cards[cardDataIndex];
+        console.log(cardDataItem.showid);
         card.innerHTML = `
             <h2>${cardDataItem.name}</h2>
             <p>Timings: ${cardDataItem.time}</p>
-            <button class="actions_button" id="actions_button">Actions</button>
+            <button class="actions_button" id="actions_button" onClick="updelshow(this, '${cardDataItem.name}', '${cardDataItem.rating}', '${cardDataItem.tag}', '${cardDataItem.price}', '${cardDataItem.showid}', '${cardDataItem.time}')">Actions</button>
         `;
 
         // Add the card element to the card container
@@ -116,3 +116,12 @@ addChildBtn.addEventListener('click', () => {
 });
 
 
+function updelshow(id, name, rat, tag, price, showid, time){
+    location.href = 'updateshow';
+    sessionStorage.setItem('ushow_name', name);
+    sessionStorage.setItem('ushow_rating', rat);
+    sessionStorage.setItem('ushow_tag', tag);
+    sessionStorage.setItem('ushow_price', price);
+    sessionStorage.setItem('ushow_showid', showid);
+    sessionStorage.setItem('ushow_time', time);    
+}
