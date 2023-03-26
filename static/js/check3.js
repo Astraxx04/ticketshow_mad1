@@ -27,8 +27,7 @@ for (let i = 0; i < numVenueToPrint; i++) {
 	vcard.innerHTML = `
 		<h1>${vcardDataItem.name}</h1>
         <div class="venuebuttons" id="venueid">
-        <button class="primary-btn venbutdel" id="venbutdel" type="button">Delete Venue</button>
-        <button class="primary-btn venbutupd" id="venbutupd" type="button" href="{{ url_for('updatevenue') }}">Update Venue</button>
+        <button class="primary-btn venbutupd" id="venbutupd" onClick=>Update/Delete</button>
         </div>
 	`;
 
@@ -43,6 +42,11 @@ vcard.setAttribute('id', 'plusBtnvenue');
 // Add the card element to the card container
 venuesContainer.appendChild(vcard);
 
+
+
+document.getElementById("venbutupd").onclick = function () {
+    location.href = 'updatevenue';
+};
 
 
 
@@ -105,6 +109,3 @@ addChildBtn.addEventListener('click', () => {
 });
 
 
-// document.getElementById("venbutdel").onclick = function () {
-//     location.href = "{{ url_for('user_registeration') }}";
-// }

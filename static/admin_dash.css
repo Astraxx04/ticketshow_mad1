@@ -138,16 +138,10 @@
     position: absolute;
 }
 
-/* The venue delete button */
-#venbutdel {
-    right: 20px;
-    top: 25px;
-}
-
 /* The venue update button */
 #venbutupd {
-    right: 175px;
-    top: 25px;
+    right: 15px;
+    top: 20px;
 }
 
 .primary-btn {
