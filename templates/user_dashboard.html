@@ -34,6 +34,16 @@
     <div class="venues" id="venues-container">
     </div>
 
+    <main class="main page__main">
+        <form class="card-form", id="booking_form", method="POST" action="/userdashboard">
+            <div class="card-form__main-content">
+            {{ form.hidden_tag() }}
+            {{ form.booking_show(class="card-form__input", type="hidden", id="booking_show", value="Banana") }}
+            {{ form.booking_venue(class="card-form__input", type="hidden", id="booking_venue", value="Apple") }}
+            </div>
+        </form>
+    </main>
+
     <link rel="stylesheet" href="../static/user_dash.css">
     <script>
         var data = {{ data|tojson }}

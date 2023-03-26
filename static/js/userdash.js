@@ -21,7 +21,7 @@ for (let i = 0; i < numVenueToPrint; i++) {
 
 	// Add the card element to the card container
 	venuesContainer.appendChild(vcard);
-    createShows(i);
+    createShows(i, vcardDataItem.name);
 }
 
 
@@ -29,7 +29,7 @@ for (let i = 0; i < numVenueToPrint; i++) {
 
 
 
-function createShows(x) {
+function createShows(x, venue_name) {
     //Show creation
     const showsContainer = document.getElementById("shows-container"+(x+1));
 
@@ -49,7 +49,7 @@ function createShows(x) {
         card.innerHTML = `
             <h2>${cardDataItem.name}</h2>
             <p>Timings: ${cardDataItem.time}</p>
-            <button class="bookings_button" id="bookings_button" onClick=>Book Tickets</button>
+            <button class="bookings_button" id="bookings_button${x+1}" onclick="bookings(this, '${cardDataItem.name}', '${venue_name}')">Book Tickets</button>
         `;
 
         // Add the card element to the card container
@@ -58,6 +58,18 @@ function createShows(x) {
     btn = btn + 1;
 }
 
-document.getElementById("bookings_button").onclick = function () {
-    location.href = 'ticketbooking';
-};
+// document.getElementById("bookings_button").onclick = function () {
+//     location.href = 'ticketbooking';
+// };
+function bookings(element, show_name, venue_name){
+    // console.log(venue_name);
+    // var str = element.id;
+    // var venueID = str.charAt(str.length-1);
+    document.getElementById("booking_show").value = show_name
+    document.getElementById("booking_venue").value = venue_name
+    // sessionStorage.setItem("booking_venue", venue_name);
+    // sessionStorage.setItem("booking_show", show_name);
+    document.getElementById("booking_form").submit(); 
+    // console.log('wait');
+    // location.href = 'ticketbooking'; 
+}

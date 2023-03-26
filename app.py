@@ -102,8 +102,13 @@ class Bookings(db.Model):
     def __repr__(self):
         return "<Bookings %r%r%r>" % self.venue_id % self.show_id % self.booking_id
 
+class Booked(db.Model):
+    random_id = db.Column(db.Integer(), unique = True, nullable = False)
+    show_name = db.Column(db.String(50), primary_key = True, nullable = False)
+    seats_booked = db.Column(db.Integer(), default = 0)
 
-
+    def __repr__(self):
+        return "<Booked %r>" % self.random_id
 
 
 
@@ -165,6 +170,11 @@ class UpdateVenueForm(FlaskForm):
     venueloc = StringField('Venue Location', validators=[DataRequired()])
     venuecap = StringField('Venue Capacity', validators=[DataRequired()])
     venueid = StringField()
+
+class DataForm(FlaskForm):
+    booking_show = StringField()
+    booking_venue = StringField()
+
 
 
 class DeleteVenue(FlaskForm):
@@ -245,7 +255,13 @@ def userdashboard():
             show.append({"name": sho.show_name, "time": sho.show_time})
         venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
     print(venu)
-    return render_template('user_dashboard.html', title='User Dashboard', data=venu)
+
+    form = DataForm()
+    if form.validate_on_submit():
+        session['venue_name'] = form.booking_venue.data
+        session['show_name'] = form.booking_show.data
+        return redirect(url_for('ticketbooking'))
+    return render_template('user_dashboard.html', title='User Dashboard', form=form, data=venu)
 
 
 
@@ -267,15 +283,32 @@ def admindashboard():
 @app.route('/ticketbooking', methods =["GET", "POST"])
 @login_required
 def ticketbooking():
-    form = NewTicketBookingForm()
+    try:
+        form = NewTicketBookingForm()
 
-    if form.validate_on_submit():
-        booking = Bookings(num_tickets=form.numseats.data, total_price=form.total.data)
-        db.session.add(booking)
-        db.session.commit()
-        return redirect(url_for('userdashboard'))
-    return render_template('ticket_book.html', title='Ticket Booking', form=form)
+        if form.validate_on_submit():
+            booking = Bookings(num_tickets=form.numseats.data, total_price=form.total.data)
+            db.session.add(booking)
+            db.session.commit()
+            return redirect(url_for('userdashboard'))
+        
+        booking_venue = session['venue_name']
+        booking_show = session['show_name']
+        show_time = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_time
+        # show_time = (db.one_or_404(db.select(Venues).filter_by(venue_name=booking_venue)))
+        total_seats = (Venues.query.filter_by(venue_name = booking_venue).first_or_404()).venue_capacity
 
+        # Edit the next line to incorporate booked_seats
+        # booked_seats = Booked.query.filter_by(show_name = booking_show).all()
+        booked_seats = None
+        if (booked_seats == None):
+            booked_seats = 0
+        available_seats = total_seats - booked_seats
+
+        booking_detail = {'booking_venue':booking_venue, 'booking_show':booking_show, 'show_time':show_time, 'total_seats':total_seats, 'available_seats':available_seats}
+        return render_template('ticket_book.html', title='Ticket Booking', form=form, booking_detail=booking_detail)
+    except:
+        return '<H1>Something Went Wrong!!</H1>'
 
 
 @app.route('/userbookings', methods =["GET", "POST"])
