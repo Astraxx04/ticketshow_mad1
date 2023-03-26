@@ -282,16 +282,18 @@ def admindashboard():
 def ticketbooking():
     try:
         form = NewTicketBookingForm()
+        booking_venue = session['venue_name']
+        booking_show = session['show_name']
 
         if form.validate_on_submit():
-            booking = Bookings(num_tickets=form.numseats.data, total_price=form.total.data, buser_id=current_user.user_id)
+            show_id = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_id
+            venue_id = (Venues.query.filter_by(venue_name = booking_venue).first_or_404()).venue_id
+            booking = Bookings(num_tickets=form.numseats.data, bvenue_id=venue_id, bshow_id=show_id, total_price=form.total.data, buser_id=current_user.user_id)
             db.session.add(booking)
             db.session.commit()
             flash("Booking confirmed!")
             return redirect(url_for('userdashboard'))
         
-        booking_venue = session['venue_name']
-        booking_show = session['show_name']
         show_time = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_time
         total_seats = (Venues.query.filter_by(venue_name = booking_venue).first_or_404()).venue_capacity
 
@@ -322,6 +324,7 @@ def userbookings():
     bookings = Bookings.query.filter(Bookings.buser_id==current_user.user_id)
     data = []
     for book in bookings:
+
         ven = Venues.query.filter(book.bvenue_id==Venues.venue_id).first()
         sho = Shows.query.filter(book.bshow_id==Shows.show_id).first()
         data.append({"venue":ven.venue_name, "show":sho.show_name})
