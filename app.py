@@ -238,7 +238,7 @@ def userdashboard():
         show=[]
         for sho in shows:
             show.append({"name": sho.show_name, "time": sho.show_time})
-        venu.append({"name": ven.venue_name, "cards": show})
+        venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
     print(venu)
     return render_template('user_dashboard.html', title='User Dashboard', data=venu)
 
@@ -254,7 +254,7 @@ def admindashboard():
         show=[]
         for sho in shows:
             show.append({"name": sho.show_name, "time": sho.show_time})
-        venu.append({"name": ven.venue_name, "cards": show})
+        venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
     return render_template('admin_dashboard.html', title='Admin Dashboard', data=venu)
 
 

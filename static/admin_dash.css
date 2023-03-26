@@ -139,7 +139,7 @@
 }
 
 /* The venue update button */
-#venbutupd {
+.venbutupd {
     right: 15px;
     top: 20px;
 }

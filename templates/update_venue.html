@@ -37,7 +37,7 @@
             {{ form.venueloc.label(class="card-form__label") }}
             {{ form.venueloc(class="card-form__input", type="text", placeholder="Enter the Venue location", id="venue_loc") }}
             {{ form.venuecap.label(class="card-form__label") }}
-            {{ form.venuecap(class="card-form__input", type="number", placeholder="Enter the maximum capacity", id="venue_cap", min="0") }}
+            {{ form.venuecap(class="card-form__input", type="number", placeholder="Enter the maximum capacity", id="venue_cap") }}
             
 
             <!-- <label class="card-form__label" for="venue_place">Place</label>
@@ -52,4 +52,6 @@
             </div>
         </form>
     </main>
+    <script src="../static/js/updatevenue.js"></script>
+
 {% endblock %}

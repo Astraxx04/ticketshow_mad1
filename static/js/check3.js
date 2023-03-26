@@ -24,10 +24,11 @@ for (let i = 0; i < numVenueToPrint; i++) {
 	// Add the card data to the element
 	const vcardDataIndex = i % venueData.length; // Use modulo to cycle through the data
 	const vcardDataItem = venueData[vcardDataIndex];
+    console.log(vcardDataItem.location);
 	vcard.innerHTML = `
 		<h1>${vcardDataItem.name}</h1>
         <div class="venuebuttons" id="venueid">
-        <button class="primary-btn venbutupd" id="venbutupd" onClick=>Update/Delete</button>
+        <button class="primary-btn venbutupd" id="venbutupd${i+1}" onClick="updel(this, '${vcardDataItem.name}', '${vcardDataItem.place}', '${vcardDataItem.location}',  '${vcardDataItem.capacity}')">Update/Delete</button>
         </div>
 	`;
 
@@ -44,9 +45,14 @@ venuesContainer.appendChild(vcard);
 
 
 
-document.getElementById("venbutupd").onclick = function () {
+function updel(id, name, place, vlocation, vcapacity){
     location.href = 'updatevenue';
-};
+    sessionStorage.setItem('uvenue_name', name);
+    sessionStorage.setItem('uvenue_place', place);
+    sessionStorage.setItem('uvenue_loc', vlocation);
+    sessionStorage.setItem('uvenue_cap', vcapacity);
+}
+
 
 
 
