@@ -31,7 +31,7 @@
     <main class="main page__main">
         <form class="card-form", method="POST" action="/ticketbooking">
             <div class="card-form__main-content">
-            <h2 class="card-form__title" id="show_detail">Booking Show:{{ booking_detail['booking_show'] }} venue:{{ booking_detail['booking_venue'] }}</h2>
+            <h2 class="card-form__title" id="show_detail">Booking : {{ booking_detail['booking_show'] }} at {{ booking_detail['booking_venue'] }}</h2>
             <p class="card-form__desc">Please enter the number of tickets and confirm booking.</p>
             <p class="seat_tot" id="seat_tot">Total number of seats: {{ booking_detail['total_seats'] }}</p>
             <p class="seat_ava" id="seat_ava">Available Seats: {{ booking_detail['available_seats'] }}</p>
