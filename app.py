@@ -163,7 +163,7 @@ class UpdateVenueForm(FlaskForm):
     venueplace = StringField('Venue Place', validators=[DataRequired()])
     venueloc = StringField('Venue Location', validators=[DataRequired()])
     venuecap = StringField('Venue Capacity', validators=[DataRequired()])
-
+    venueid = StringField()
 
 #Routes--------------------------------------------------------------
 
@@ -254,7 +254,7 @@ def admindashboard():
         show=[]
         for sho in shows:
             show.append({"name": sho.show_name, "time": sho.show_time})
-        venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+        venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity, "venueid": ven.venue_id})
     return render_template('admin_dashboard.html', title='Admin Dashboard', data=venu)
 
 
@@ -342,10 +342,10 @@ def updateshow():
 @login_required
 def updatevenue():
     form = UpdateVenueForm()
-
+    
     if form.validate_on_submit():
-        ve_id = 1
-        venue = Venues.query.filter(Venues.venue_id==1).first()
+        ven_id = form.venueid.data
+        venue = Venues.query.filter(Venues.venue_id==ven_id).first()
         venue.venue_name=form.venuename.data
         venue.venue_place=form.venueplace.data
         venue.venue_location=form.venueloc.data
