@@ -16,8 +16,12 @@ for (let i = 0; i < numVenueToPrint; i++) {
 	const vcardDataItem = venueData[vcardDataIndex];
 	vcard.innerHTML = `
 		<h1>${vcardDataItem.venue}: ${vcardDataItem.show}</h1>
-        <button class="rate-button">Rate</button>
 	`;
+
+	// vcard.innerHTML = `
+	// 	<h1>${vcardDataItem.venue}: ${vcardDataItem.show}</h1>
+    //     <button class="rate-button">Rate</button>
+	// `;
 
 	// Add the card element to the card container
 	venuesContainer.appendChild(vcard);

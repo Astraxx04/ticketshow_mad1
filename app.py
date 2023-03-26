@@ -103,7 +103,7 @@ class Bookings(db.Model):
         return "<Bookings %r%r%r>" % self.venue_id % self.show_id % self.booking_id
 
 class Booked(db.Model):
-    booked_id = db.Column(db.Integer(), primary_key = True)
+    booked_id = db.Column(db.Integer(), primary_key = True, autoincrement=True)
     show_name = db.Column(db.String(50), primary_key = True, nullable = False)
     venue_name = db.Column(db.String(50), primary_key = True, nullable = False)
     seats_booked = db.Column(db.Integer(), default = 0)
@@ -179,8 +179,6 @@ class UpdateVenueForm(FlaskForm):
 class DataForm(FlaskForm):
     booking_show = StringField()
     booking_venue = StringField()
-
-
 
 #Routes--------------------------------------------------------------
 
@@ -295,7 +293,9 @@ def ticketbooking():
             booking = Bookings(num_tickets=form.numseats.data, bvenue_id=venue_id, bshow_id=show_id, total_price=form.total.data, buser_id=current_user.user_id)
             db.session.add(booking)
             
-            booked = Booked(show_name=booking_show, venue_name=booking_venue, seats_booked=form.numseats.data)
+            #Variable to keep track of number of bookings
+            booked_count = len(Booked.query.all())+1
+            booked = Booked(show_name=booking_show, venue_name=booking_venue, seats_booked=form.numseats.data, booked_id=booked_count)
             db.session.add(booked)
             
             db.session.commit()
@@ -328,7 +328,7 @@ def ticketbooking():
 @app.route('/userbookings', methods =["GET", "POST"])
 @login_required
 def userbookings():
-    print(current_user.user_id)
+    # print(current_user.user_id)
     bookings = Bookings.query.filter(Bookings.buser_id==current_user.user_id)
     data = []
     for book in bookings:
