@@ -1,8 +1,3 @@
-var booking_venue = sessionStorage.getItem("booking_venue");
-var booking_show = sessionStorage.getItem("booking_show");
-
-
-
 
 
 function tot_price() 

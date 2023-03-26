@@ -49,7 +49,7 @@ function createShows(x, venue_name) {
         card.innerHTML = `
             <h2>${cardDataItem.name}</h2>
             <p>Timings: ${cardDataItem.time}</p>
-            <button class="bookings_button" id="bookings_button${x+1}" type="submit" onclick="bookings(this, '${cardDataItem.name}', '${venue_name}')">Book Tickets</button>
+            <button class="bookings_button" id="bookings_button${x+1}" onclick="bookings(this, '${cardDataItem.name}', '${venue_name}')">Book Tickets</button>
         `;
 
         // Add the card element to the card container
@@ -65,8 +65,11 @@ function bookings(element, show_name, venue_name){
     // console.log(venue_name);
     // var str = element.id;
     // var venueID = str.charAt(str.length-1);
-    sessionStorage.setItem("booking_venue", venue_name);
-    sessionStorage.setItem("booking_show", show_name);
+    document.getElementById("booking_show").value = show_name
+    document.getElementById("booking_venue").value = venue_name
+    // sessionStorage.setItem("booking_venue", venue_name);
+    // sessionStorage.setItem("booking_show", show_name);
+    document.getElementById("booking_form").submit(); 
     // console.log('wait');
-    location.href = 'ticketbooking'; 
+    // location.href = 'ticketbooking'; 
 }
