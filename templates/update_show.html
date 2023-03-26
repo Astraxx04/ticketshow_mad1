@@ -40,12 +40,12 @@
             {{ form.tags(class="card-form__input", type="text", placeholder="Enter tags", id="show_tag") }}
             {{ form.price.label(class="card-form__label") }}
             {{ form.price(class="card-form__input", type="number", placeholder="Enter value", id="price", min="100") }}
-            {{ form.showid(class="card-form__input", type="hidden", placeholder="Venue id", id="show_id") }}
+            {{ form.showid(class="card-form__input", type="hidden", placeholder="Show id", id="show_id") }}
             
             </div>
             <div class="card-form__footer">
             <button class="primary-btn" type="submit" formmethod="post">Save</button>
-            <button class="primary-btn deleteshow" type="button">Delete Show</button>
+            <button class="primary-btn deleteshow" type="submit" formaction="/deleteshow" formmethod="post" id="shodelbutton" onclick="showdelete()">Delete Show</button>
             </div>
         </form>
     </main>
