@@ -52,6 +52,9 @@ class Users(db.Model, UserMixin):
     user_id = db.Column(db.Integer(), primary_key = True)
     password = db.Column(db.String(20), nullable = False)
     usr_name = db.Column(db.String(30), nullable = False)
+    username = db.Column(db.String(30), nullable = False)
+    usr_phone = db.Column(db.Integer(), nullable = False)
+    usr_mail = db.Column(db.String(40), nullable = False)
     userType = db.Column(db.String(20), default = 'user')
 
     def get_id(self):
@@ -74,7 +77,7 @@ class Venues(db.Model):
     venue_place = db.Column(db.String(50), nullable = False)
     venue_location = db.Column(db.String(50), nullable = False)
     venue_capacity = db.Column(db.Integer(), nullable = False)
-    shows = db.relationship("Shows")
+    shows = db.relationship("Shows", back_populates="venues", cascade="all, delete")
 
     def __repr__(self):
         return "<Venue %r>" % self.venue_id
@@ -86,8 +89,8 @@ class Shows(db.Model):
     show_tag = db.Column(db.String(50), nullable = False)
     show_rating = db.Column(db.Integer(), nullable = False)
     show_price = db.Column(db.Integer(), nullable = False)
-    svenue_id = db.Column(db.Integer(), db.ForeignKey('venues.venue_id', ondelete="CASCADE"))
-
+    svenue_id = db.Column(db.Integer(), db.ForeignKey('venues.venue_id', ondelete='CASCADE'))
+    venues = db.relationship("Venues", back_populates="shows")
     def __repr__(self):
         return "<Shows %r>" % self.show_id
 
@@ -133,6 +136,9 @@ class UserRegisterationForm(FlaskForm):
     username = StringField('User Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     passwordconf = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match!')])
+    name = StringField('Name', validators=[DataRequired()])
+    usermail = StringField('User Mail', validators=[DataRequired()])
+    userphone = StringField('User Phone', validators=[DataRequired()])
 
 
 class NewVenueForm(FlaskForm):
@@ -179,6 +185,18 @@ class UpdateVenueForm(FlaskForm):
 class DataForm(FlaskForm):
     booking_show = StringField()
     booking_venue = StringField()
+    search_items = StringField()
+
+
+class UserUpdateForm(FlaskForm):
+    name = StringField()
+    username = StringField()
+    usermail = StringField()
+    userphone = StringField()
+    existingpassword = StringField()
+    newuserpassword = StringField()
+    confuserpassword = StringField()
+
 
 #Routes--------------------------------------------------------------
 
@@ -209,7 +227,7 @@ def adminlogin():
 
 
 
-@app.route('/userlogin', methods =["GET", "POST"])
+@app.route('/login', methods =["GET", "POST"])
 def login():
     form = UserLoginForm()
 
@@ -218,6 +236,7 @@ def login():
         if user:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
+                flash("Login Successful!!")
                 return redirect(url_for('userdashboard'))
             else:
                 flash('Invalid credentials!!')
@@ -234,10 +253,11 @@ def user_registeration():
 
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data)
-        user = Users(password=hashed_password, usr_name=form.username.data)
+        user = Users(password=hashed_password, usr_name=form.username.data, usr_phone=form.userphone.data, usr_mail=form.usermail.data, username=form.name.data)
         db.session.add(user)
         db.session.commit()
         login_user(user)
+        flash("Registeratin Successful!!")
         return redirect(url_for('login'))
     return render_template('registeration.html', title='Registeration', form=form)
 
@@ -246,21 +266,119 @@ def user_registeration():
 @app.route('/userdashboard', methods =["GET", "POST"])
 @login_required
 def userdashboard():
-    venues = Venues.query.all()
-    venu=[]
-    for ven in venues:
-        shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
-        show=[]
-        for sho in shows:
-            show.append({"name": sho.show_name, "time": sho.show_time})
-        venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
-    
     form = DataForm()
+    pkey = 0
+    searchkey = ''
+    if request.method == 'POST':
+        pkey=1
+        searchkey = request.form['searchitem']
+        fvenuelist = []
+        svenplace = Venues.query.filter(Venues.venue_place.ilike(searchkey)).all()
+        svenloc = Venues.query.filter(Venues.venue_location.ilike(searchkey)).all()
+        venname = Venues.query.filter(Venues.venue_name.ilike(searchkey)).all()
+        sshotag = Shows.query.filter(Shows.show_tag.ilike(searchkey)).all()
+        sshoname = Shows.query.filter(Shows.show_name.ilike(searchkey)).all()
+
+        #To check for place related shows
+        if svenplace :
+            venplace=[]
+            sven = Venues.query.filter(Venues.venue_place.ilike(searchkey)).all()
+            for ven in sven:
+                shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+                show=[]
+                for sho in shows:
+                    show.append({"name": sho.show_name, "time": sho.show_time})
+                venplace.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+            fvenuelist = venplace
+
+        #To check for location related shows
+        elif svenloc :
+            venloc=[]
+            sven = Venues.query.filter(Venues.venue_location.ilike(searchkey)).all()
+            for ven in sven:
+                shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+                show=[]
+                for sho in shows:
+                    show.append({"name": sho.show_name, "time": sho.show_time})
+                venloc.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+            fvenuelist = venloc
+
+        #To check for venue names related shows
+        elif venname :
+            venname=[]
+            ven = Venues.query.filter(Venues.venue_name.ilike(searchkey)).all()
+            for ven in sven:
+                shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+                show=[]
+                for sho in shows:
+                    show.append({"name": sho.show_name, "time": sho.show_time})
+                venname.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+            fvenuelist = venname
+
+        #To check for tags related shows
+        elif sshotag :
+            shotag=[]
+            ssho = Shows.query.filter(Shows.show_tag.ilike(searchkey)).all()
+            sven=[]
+            for sho in ssho:
+                veid = Venues.query.filter(Venues.venue_id==sho.svenue_id).first()
+                sven.append(veid)
+            for ven in sven:
+                shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+                show=[]
+                for sho in shows:
+                    show.append({"name": sho.show_name, "time": sho.show_time})
+                shotag.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+            fvenuelist = shotag
+
+        #To check for show name related shows
+        elif sshoname :
+            shoname=[]
+            ssho = Shows.query.filter(Shows.show_name.ilike(searchkey)).all()
+            sven=[]
+            for sho in ssho:
+                veid = Venues.query.filter(Venues.venue_id==sho.svenue_id).first()
+            sven.append(veid)
+            for ven in sven:
+                shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+                show=[]
+                for sho in shows:
+                    show.append({"name": sho.show_name, "time": sho.show_time})
+                shoname.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+            fvenuelist = shoname
+
+        else :
+            venues = Venues.query.all()
+            venu=[]
+            for ven in venues:
+                shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+                show=[]
+                for sho in shows:
+                    show.append({"name": sho.show_name, "time": sho.show_time})
+                venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+            fvenuelist = venu
+
+
+    if pkey == 0:
+        venues = Venues.query.all()
+        venu=[]
+        for ven in venues:
+            shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+            show=[]
+            for sho in shows:
+                show.append({"name": sho.show_name, "time": sho.show_time})
+            venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+        fvenuelist = venu
+
+
+
+
     if form.validate_on_submit():
         session['venue_name'] = form.booking_venue.data
         session['show_name'] = form.booking_show.data
         return redirect(url_for('ticketbooking'))
-    return render_template('user_dashboard.html', title='User Dashboard', form=form, data=venu)
+
+    return render_template('user_dashboard.html', title='User Dashboard', form=form, data=fvenuelist)
 
 
 
@@ -276,6 +394,35 @@ def admindashboard():
             show.append({"name": sho.show_name, "time": sho.show_time, "showid": sho.show_id, "tag": sho.show_tag, "price": sho.show_price, "rating": sho.show_rating})
         venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity, "venueid": ven.venue_id})
     return render_template('admin_dashboard.html', title='Admin Dashboard', data=venu)
+
+
+
+@app.route('/profile', methods =["GET", "POST"])
+@login_required
+def profile():
+    usrdet = Users.query.filter_by(user_id=current_user.user_id).first()
+    details = {"usr_name":usrdet.usr_name, "usr_phone":usrdet.usr_phone, "usr_mail":usrdet.usr_mail, "username":usrdet.username, "password":usrdet.password}
+    print(details)
+
+
+    form = UserUpdateForm()
+    if form.validate_on_submit():
+        if check_password_hash(usrdet.password, form.existingpassword.data):
+            if form.newuserpassword == form.confuserpassword.data:
+                hashed_password = generate_password_hash(form.newuserpassword.data)
+                user = Users(password=hashed_password, usr_name=form.username.data, usr_phone=form.userphone.data, usr_mail=form.usermail.data, username=form.name.data)
+                db.session.add(user)
+                db.session.commit()
+                login_user(user)
+                return redirect(url_for('userdashboard'))
+            else:
+                flash("Enter the same password!!")
+                return redirect(url_for('userdashboard'))
+        else:
+            flash("Enter the correct password!!")
+            return redirect(url_for('userdashboard'))
+
+    return render_template('profile.html', title='Profile', form=form, data=details)
 
 
 
@@ -346,11 +493,11 @@ def new_show():
     form = NewShowForm()
 
     if form.validate_on_submit():
-        # print(form.venue.data)
         venue_id = int(form.venue.data[-1])
         show = Shows(show_name=form.showname.data, show_time=form.starttime.data, show_tag=form.tags.data, show_rating=form.ratings.data, show_price=form.price.data, svenue_id=venue_id)
         db.session.add(show)
         db.session.commit()
+        flash('Show Created Successfully!')
         return redirect(url_for('admindashboard'))
     return render_template('new_show.html', title='New Show', form=form)
 
@@ -365,6 +512,7 @@ def new_venue():
         venue = Venues(venue_name=form.venuename.data, venue_place=form.venueplace.data, venue_location=form.venueloc.data, venue_capacity=form.venuecap.data)
         db.session.add(venue)
         db.session.commit()
+        flash('Venue Created Successfully!')
         return redirect(url_for('admindashboard'))
     return render_template('new_venue.html', title='New Venue', form=form)
 
@@ -407,6 +555,19 @@ def updatevenue():
     return render_template('update_venue.html', form=form)
 
 
+@app.route('/summary', methods =["GET", "POST"])
+@login_required
+def summary():
+    venues = Venues.query.all()
+    venu=[]
+    for ven in venues:
+        shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+        show=[]
+        for sho in shows:
+            show.append({"name": sho.show_name, "time": sho.show_time, "showid": sho.show_id, "tag": sho.show_tag, "price": sho.show_price, "rating": sho.show_rating})
+        venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity, "venueid": ven.venue_id})
+    return render_template('summary.html', title='Admin Dashboard', data=venu)
+
 
 
 @app.route('/deleteshow', methods =["GET", "POST"])
@@ -418,6 +579,7 @@ def deleteshow():
     show = Shows.query.filter(Shows.show_id==sh_id).first()
     db.session.delete(show)
     db.session.commit()
+    flash('Deleted Successfully!')
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
 
@@ -432,8 +594,24 @@ def deletevenue():
     venue = Venues.query.filter(Venues.venue_id==ve_id).first()
     db.session.delete(venue)
     db.session.commit()
+    flash('Deleted Successfully!')
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
+
+
+
+@app.route('/deleteuser', methods =["GET", "POST"])
+@login_required
+def deleteuser():
+    us_id = current_user.user_id
+    print(us_id)
+    cur_user = Users.query.filter(Users.user_id==us_id).first()
+    db.session.delete(cur_user)
+    db.session.commit()
+    flash('User Deleted Successfully!')
+    print("successfully deleted")
+    return redirect(url_for('login'))
+
 
 
 @app.route('/logout')

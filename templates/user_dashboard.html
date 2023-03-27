@@ -11,10 +11,15 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="usr">User Dashboard</div>
+            <div class="usr"><a href="{{ url_for('userdashboard') }}">User Bookings</a></div>
+            <form class="form-inline my-2 my-lg-0 inpform" method="post" action="/userdashboard">
+                <input class="form-control mr-sm-2" type="search" name="searchitem" placeholder="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 searchbut" type="submit">Search</button>
+            </form>
+
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Profile</a>
+                    <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('userbookings') }}">Bookings</a>
@@ -25,12 +30,7 @@
             </ul>
         </div>
     </nav>
-    <!-- {% for message in get_flashed_messages() %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">  
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %} -->
+    
     <div class="venues" id="venues-container">
     </div>
 

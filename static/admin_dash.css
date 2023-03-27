@@ -157,3 +157,17 @@
     color: #002757;
     background-color: white;
 }
+
+
+
+/* Summary */
+
+.chartContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cancard{
+    flex-basis: calc(50% - 20px);
+    padding: 30px;
+}

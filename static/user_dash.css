@@ -163,3 +163,41 @@
     margin-top: 40px;
     margin-bottom: 40px;
 }
+
+.inpform{
+    width: 20%;
+    margin-left: 20px;
+}
+
+.searchbut{
+    color: #202020;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.searchbut:hover {
+    color: #ffffff;
+    background-color: #202020;
+    border-color: #ffffff;
+}
+
+.usr a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.usericon{
+    width : 30%; 
+    background-color: rgba(255, 255, 255, 0.7); 
+    margin-top: 10px; 
+    border-radius:15px; 
+    padding: 5px;
+}
+
+.profilecont{
+    width : 40%; 
+    background-color: rgba(255, 255, 255, 0.7); 
+    margin-top: 10px; 
+    border-radius:15px; 
+    padding: 5px;
+}
