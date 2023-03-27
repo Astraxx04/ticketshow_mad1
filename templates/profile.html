@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% block head %}    
-    <title>Bookings</title>
+{% block head %}
+    <title>User Dashboard</title>
 {% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" href="../static/user_dash.css">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -11,13 +12,13 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="usr">User Bookings</div>
+            <div class="usr">User Profile</div>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                    <a class="nav-link" href="{{ url_for('userdashboard') }}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('userdashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('userbookings') }}">Bookings</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -25,12 +26,6 @@
             </ul>
         </div>
     </nav>
-
-    <div class="venues" id="venues-container"></div>
-    <link rel="stylesheet" href="../static/user_bookings.css">
-    <script>
-        var data = {{ data | tojson }};
-    </script>
-    <script src="../static/js/userbooking.js"></script>
-    
 {% endblock %}
+
+<!-- </html> -->

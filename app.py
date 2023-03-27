@@ -179,8 +179,7 @@ class UpdateVenueForm(FlaskForm):
 class DataForm(FlaskForm):
     booking_show = StringField()
     booking_venue = StringField()
-
-
+    search_items = StringField()
 
 #Routes--------------------------------------------------------------
 
@@ -248,6 +247,77 @@ def user_registeration():
 @app.route('/userdashboard', methods =["GET", "POST"])
 @login_required
 def userdashboard():
+    form = DataForm()
+
+    if request.method == 'POST':
+        searchkey = request.form['searchitem']
+        print(searchkey)
+
+        #To check for place related shows
+        # venplace=[]
+        # sven = Venues.query.filter(Venues.venue_place.ilike(searchkey)).all()
+        # for ven in sven:
+        #     shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+        #     show=[]
+        #     for sho in shows:
+        #         show.append({"name": sho.show_name, "time": sho.show_time})
+        #     venplace.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+
+        #To check for location related shows
+        # venloc=[]
+        # sven = Venues.query.filter(Venues.venue_location.ilike(searchkey)).all()
+        # for ven in sven:
+        #     shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+        #     show=[]
+        #     for sho in shows:
+        #         show.append({"name": sho.show_name, "time": sho.show_time})
+        #     venloc.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+        #     print(venloc)
+
+        #To check for venue names related shows
+        # venname=[]
+        # ven = Venues.query.filter(Venues.venue_name.ilike(searchkey)).all()
+        # for ven in sven:
+        #     shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+        #     show=[]
+        #     for sho in shows:
+        #         show.append({"name": sho.show_name, "time": sho.show_time})
+        #     venloc.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+        #     print(venloc)
+
+        #To check for tags related shows
+        # shotag=[]
+        # ssho = Shows.query.filter(Shows.show_tag.ilike(searchkey)).all()
+        # sven=[]
+        # for sho in ssho:
+        #     veid = Venues.query.filter(Venues.venue_id==sho.svenue_id).first()
+        #     sven.append(veid)
+        # for ven in sven:
+        #     shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+        #     show=[]
+        #     for sho in shows:
+        #         show.append({"name": sho.show_name, "time": sho.show_time})
+        #     shotag.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+        #     print(shotag)
+
+        #To check for show name related shows
+        # shoname=[]
+        # ssho = Shows.query.filter(Shows.show_name.ilike(searchkey)).all()
+        # sven=[]
+        # for sho in ssho:
+        #     veid = Venues.query.filter(Venues.venue_id==sho.svenue_id).first()
+        #     sven.append(veid)
+        # for ven in sven:
+        #     shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+        #     show=[]
+        #     for sho in shows:
+        #         show.append({"name": sho.show_name, "time": sho.show_time})
+        #     shoname.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
+        #     print(shoname)
+
+
+
+
     venues = Venues.query.all()
     venu=[]
     for ven in venues:
@@ -257,7 +327,6 @@ def userdashboard():
             show.append({"name": sho.show_name, "time": sho.show_time})
         venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity})
     
-    form = DataForm()
     if form.validate_on_submit():
         session['venue_name'] = form.booking_venue.data
         session['show_name'] = form.booking_show.data
@@ -278,6 +347,13 @@ def admindashboard():
             show.append({"name": sho.show_name, "time": sho.show_time, "showid": sho.show_id, "tag": sho.show_tag, "price": sho.show_price, "rating": sho.show_rating})
         venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity, "venueid": ven.venue_id})
     return render_template('admin_dashboard.html', title='Admin Dashboard', data=venu)
+
+
+
+@app.route('/profile', methods =["GET", "POST"])
+@login_required
+def profile():
+    return render_template('profile.html', title='Profile')
 
 
 
