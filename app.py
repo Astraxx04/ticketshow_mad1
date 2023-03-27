@@ -55,7 +55,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(30), nullable = False)
     usr_phone = db.Column(db.Integer(), nullable = False)
     usr_mail = db.Column(db.String(40), nullable = False)
-    userType = db.Column(db.String(20), default = 'user')
+    roles = db.Column(db.String(20), default = 'user')
 
     def get_id(self):
            return (self.user_id)
@@ -64,7 +64,7 @@ class Users(db.Model, UserMixin):
         return "<User %r>" % self.user_id
 
     def isAdmin(self): 
-        if self.userType == 'admin':
+        if self.roles == 'admin':
             return True
         else:
             return False
