@@ -274,11 +274,7 @@ def userdashboard():
     form = DataForm()
     pkey = 0
     searchkey = ''
-<<<<<<< HEAD
-    if False:#request.method == 'POST':
-=======
-    if False: #request.method == 'POST':
->>>>>>> rating_experimental
+    if request.method == 'POST':
         pkey=1
         searchkey = request.form['searchitem']
         fvenuelist = []
