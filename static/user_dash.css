@@ -180,3 +180,8 @@
     background-color: #202020;
     border-color: #ffffff;
 }
+
+.usr a {
+    text-decoration: none;
+    color: #ffffff;
+}

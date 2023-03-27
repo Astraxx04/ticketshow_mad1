@@ -11,7 +11,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="usr">User Dashboard</div>
+            <div class="usr"><a href="{{ url_for('userdashboard') }}">User Bookings</a></div>
             <form class="form-inline my-2 my-lg-0 inpform" method="post" action="/userdashboard">
                 <input class="form-control mr-sm-2" type="search" name="searchitem" placeholder="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0 searchbut" type="submit">Search</button>
