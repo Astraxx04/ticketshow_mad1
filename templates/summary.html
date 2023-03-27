@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block head %}
-    <title>Admin Dashboard</title>
+    <title>Summary</title>
 {% endblock %}
 
 {% block body %}
@@ -15,10 +15,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="usr">Admin Dashboard</div>
+            <div class="usr">Summary</div>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('summary') }}">Summary</a>
+                    <a class="nav-link" href="{{ url_for('admindashboard') }}">Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
@@ -26,9 +26,6 @@
             </ul>
         </div>
     </nav>
-
-    <div class="venues" id="venues-container">
-    </div>
-
-    <script src="../static/js/check3.js"></script>
+    <div id="chartContainer" class="chartContainer"></div>
+    <script src="../static/js/summary.js"></script>
 {% endblock %}

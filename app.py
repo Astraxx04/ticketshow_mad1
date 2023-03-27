@@ -74,7 +74,7 @@ class Venues(db.Model):
     venue_place = db.Column(db.String(50), nullable = False)
     venue_location = db.Column(db.String(50), nullable = False)
     venue_capacity = db.Column(db.Integer(), nullable = False)
-    shows = db.relationship("Shows")
+    shows = db.relationship("Shows", back_populates="venues", cascade="all, delete")
 
     def __repr__(self):
         return "<Venue %r>" % self.venue_id
@@ -86,8 +86,8 @@ class Shows(db.Model):
     show_tag = db.Column(db.String(50), nullable = False)
     show_rating = db.Column(db.Integer(), nullable = False)
     show_price = db.Column(db.Integer(), nullable = False)
-    svenue_id = db.Column(db.Integer(), db.ForeignKey('venues.venue_id', ondelete="CASCADE"))
-
+    svenue_id = db.Column(db.Integer(), db.ForeignKey('venues.venue_id', ondelete='CASCADE'))
+    venues = db.relationship("Venues", back_populates="shows")
     def __repr__(self):
         return "<Shows %r>" % self.show_id
 
@@ -346,11 +346,11 @@ def new_show():
     form = NewShowForm()
 
     if form.validate_on_submit():
-        # print(form.venue.data)
         venue_id = int(form.venue.data[-1])
         show = Shows(show_name=form.showname.data, show_time=form.starttime.data, show_tag=form.tags.data, show_rating=form.ratings.data, show_price=form.price.data, svenue_id=venue_id)
         db.session.add(show)
         db.session.commit()
+        flash('Show Created Successfully!')
         return redirect(url_for('admindashboard'))
     return render_template('new_show.html', title='New Show', form=form)
 
@@ -365,6 +365,7 @@ def new_venue():
         venue = Venues(venue_name=form.venuename.data, venue_place=form.venueplace.data, venue_location=form.venueloc.data, venue_capacity=form.venuecap.data)
         db.session.add(venue)
         db.session.commit()
+        flash('Venue Created Successfully!')
         return redirect(url_for('admindashboard'))
     return render_template('new_venue.html', title='New Venue', form=form)
 
@@ -407,6 +408,19 @@ def updatevenue():
     return render_template('update_venue.html', form=form)
 
 
+@app.route('/summary', methods =["GET", "POST"])
+@login_required
+def summary():
+    venues = Venues.query.all()
+    venu=[]
+    for ven in venues:
+        shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
+        show=[]
+        for sho in shows:
+            show.append({"name": sho.show_name, "time": sho.show_time, "showid": sho.show_id, "tag": sho.show_tag, "price": sho.show_price, "rating": sho.show_rating})
+        venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity, "venueid": ven.venue_id})
+    return render_template('summary.html', title='Admin Dashboard', data=venu)
+
 
 
 @app.route('/deleteshow', methods =["GET", "POST"])
@@ -418,6 +432,7 @@ def deleteshow():
     show = Shows.query.filter(Shows.show_id==sh_id).first()
     db.session.delete(show)
     db.session.commit()
+    flash('Deleted Successfully!')
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
 
@@ -432,6 +447,7 @@ def deletevenue():
     venue = Venues.query.filter(Venues.venue_id==ve_id).first()
     db.session.delete(venue)
     db.session.commit()
+    flash('Deleted Successfully!')
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
 

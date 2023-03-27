@@ -10,7 +10,7 @@ const venuesContainer = document.getElementById("venues-container");
 
 var venueData = data;
 const numVenueToPrint = venueData.length;
-
+console.log(venueData);
 // --- Global variable keeping track of number of venues---
 var venues = venueData.length;
 
@@ -87,7 +87,7 @@ function createShows(x) {
     btn = btn + 1;
     const card = document.createElement("div");
     card.classList.add("card");
-    card.innerHTML = `<button class="showadd_button" onclick="addShow(this)" id="plusBtnshow${btn}" href=""{{ url_for('newshow') ><img class="add-show-img" id="add-show-img" src="static/images/plus_icon.png" alt="Add a new Show"></button>`;
+    card.innerHTML = `<button class="showadd_button" onclick="addShow(${venueData[x].venueid})" id="plusBtnshow${btn}" href=""{{ url_for('newshow') ><img class="add-show-img" id="add-show-img" src="static/images/plus_icon.png" alt="Add a new Show"></button>`;
     // card.setAttribute('id',`plusBtnshow${btn}`);
     // Add the card element to the card container
     showsContainer.appendChild(card);
@@ -95,7 +95,7 @@ function createShows(x) {
 
 // --- Function responsible for changing the page ---
 function addShow(element) {
-    let cookie = element.id;
+    let cookie = element;
     window.location.href = 'newshow';
     sessionStorage.setItem('venue_id', cookie);
 }
