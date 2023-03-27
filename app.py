@@ -197,6 +197,11 @@ class UserUpdateForm(FlaskForm):
     newuserpassword = StringField()
     confuserpassword = StringField()
 
+class RatingForm(FlaskForm):
+    venue = StringField()
+    show = StringField()
+    rating = StringField()
+
 
 #Routes--------------------------------------------------------------
 
@@ -613,6 +618,25 @@ def deleteuser():
     return redirect(url_for('login'))
 
 
+@app.route('/rate', methods =["GET", "POST"])
+@login_required
+def rating():
+    form = RatingForm()
+
+    if form.validate_on_submit():
+        venue = form.venue.data
+        show = form.show.data
+        rating_value = form.rating.data
+        userid = current_user.user_id
+        rating_count = len(Ratings.query.all())+1
+        rating = Ratings(ratings_id=rating_count, user_id=userid, show_name=show, venue_name=venue, ratings=rating_value)
+        db.session.add(rating)
+        db.session.commit()
+        flash("Your rating has been saved")
+        return redirect(url_for('userdashboard'))
+
+    return render_template('rating.html', form=form)
+    pass
 
 @app.route('/logout')
 @login_required

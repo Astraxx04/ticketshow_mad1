@@ -14,15 +14,21 @@ for (let i = 0; i < numVenueToPrint; i++) {
 	// Add the card data to the element
 	const vcardDataIndex = i % venueData.length; // Use modulo to cycle through the data
 	const vcardDataItem = venueData[vcardDataIndex];
-	vcard.innerHTML = `
-		<h1>${vcardDataItem.venue}: ${vcardDataItem.show}</h1>
-	`;
-
 	// vcard.innerHTML = `
 	// 	<h1>${vcardDataItem.venue}: ${vcardDataItem.show}</h1>
-    //     <button class="rate-button">Rate</button>
 	// `;
+
+	vcard.innerHTML = `
+		<h1>${vcardDataItem.venue}: ${vcardDataItem.show}</h1>
+        <button class="rate-button" onclick="changepage('${vcardDataItem.venue}', '${vcardDataItem.show}')">Rate</button>
+	`;
 
 	// Add the card element to the card container
 	venuesContainer.appendChild(vcard);
+}
+
+function changepage(venue, show){
+	sessionStorage.setItem('rating_venue', venue);
+	sessionStorage.setItem('rating_show', show);
+	window.location.href = '/rate';
 }
