@@ -136,9 +136,9 @@ class UserRegisterationForm(FlaskForm):
     username = StringField('User Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     passwordconf = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match!')])
-    name = StringField()
-    usermail = StringField()
-    userphone = StringField()
+    name = StringField('Name', validators=[DataRequired()])
+    usermail = StringField('User Mail', validators=[DataRequired()])
+    userphone = StringField('User Phone', validators=[DataRequired()])
 
 
 class NewVenueForm(FlaskForm):

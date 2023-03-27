@@ -24,18 +24,22 @@
         </div>
     </nav>
 
-    <h3>User Login</h3>
-    <form method="POST" action="/userlogin">
-        {{ form.hidden_tag() }}
-        {{ form.username.label }}
-        {{ form.username(type="text", placeholder="Enter user name", id="user_name") }}
-        {{ form.password.label }}
-        {{ form.password(type="password", placeholder="Enter password", id="user_password") }}
-        <div class="buttons">
-            <button type="submit" formmethod="post">Log In</button>
-            <button type="button" id="regbutton">Register</button>
-        </div>
-    </form>
+    <main class="main page__main">
+        <form class="card-form" method="POST" action="/login">
+            <div class="card-form__main-content">
+            <h2 class="card-form__title">User Login</h2>
+            {{ form.hidden_tag() }}
+            {{ form.username.label(class="card-form__label") }}
+            {{ form.username(class="card-form__input", type="text", placeholder="Enter user name", id="user_name") }}
+            {{ form.password.label(class="card-form__label") }}
+            {{ form.password(class="card-form__input", type="password", placeholder="Enter password", id="user_password") }}
+            </div>
+            <div class="card-form__footer">
+                <button class="primary-btn" type="submit" formmethod="post">Login</button>
+                <button class="primary-btn" type="button" id="regbutton">Register</button>
+            </div>
+        </form>
+    </main>
 
     <script type="text/javascript">
         document.getElementById("regbutton").onclick = function () {

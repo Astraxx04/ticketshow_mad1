@@ -24,26 +24,34 @@
         </div>
     </nav>
 
-    <h3>Register</h3>
-    <form method="POST" action="/registeration">
-        {{ form.hidden_tag() }}
-        {{ form.name.label }}
-        {{ form.name(type="text", placeholder="Enter name", id="uname") }}
-        {{ form.username.label }}
-        {{ form.username(type="text", placeholder="Enter user name", id="usrname") }}
-        {{ form.usermail.label }}
-        {{ form.usermail(type="mail", placeholder="Enter mail", id="usrmail") }}
-        {{ form.userphone.label }}
-        {{ form.userphone(type="number", placeholder="Enter phone number", id="usrphone") }}
-        {{ form.password.label }}
-        {{ form.password(type="password", placeholder="Enter password", id="userpassword") }}
-        {{ form.passwordconf.label }}
-        {{ form.passwordconf(type="password", placeholder="Enter password", id="userpasswordconf") }}
-        <div class="buttons">
+    <main class="main page__main">
+        <form class="card-form" method="POST" action="/registeration">
+            <div class="card-form__main-content">
+            <h2 class="card-form__title">Registeration</h2>
+            {{ form.hidden_tag() }}
+            {{ form.name.label(class="card-form__label") }}
+            {{ form.name(class="card-form__input", type="text", placeholder="Enter name", id="uname") }}
+            {{ form.username.label(class="card-form__label") }}
+            {{ form.username(class="card-form__input", type="text", placeholder="Enter user name", id="usrname") }}
+            {{ form.usermail.label(class="card-form__label") }}
+            {{ form.usermail(class="card-form__input", type="mail", placeholder="Enter mail", id="usrmail") }}
+            {{ form.userphone.label(class="card-form__label") }}
+            {{ form.userphone(class="card-form__input", type="number", placeholder="Enter phone number", id="usrphone") }}
+            {{ form.password.label(class="card-form__label") }}
+            {{ form.password(class="card-form__input", type="password", placeholder="Enter password", id="userpassword") }}
+            {{ form.passwordconf.label(class="card-form__label") }}
+            {{ form.passwordconf(class="card-form__input", type="password", placeholder="Enter password", id="userpasswordconf") }}
+            <!-- <div class="buttons">
             <button type="submit" formmethod="post">Register</button>
             <button type="button" id="loginbutton">Login</button>
-        </div>
-    </form>
+            </div> -->
+            </div>
+            <div class="card-form__footer">
+                <button class="primary-btn" type="submit" formmethod="post">Register</button>
+                <button class="primary-btn" type="button" id="loginbutton">Login</button>
+            </div>
+        </form>
+    </main>
 
     <script type="text/javascript">
         document.getElementById("loginbutton").onclick = function () {

@@ -25,13 +25,19 @@
     </nav>
 
 
-    <h3>Admin Login</h3>
-    <form method="POST" action="/adminlogin">
-        {{ form.hidden_tag() }}
-        {{ form.adminname.label }}
-        {{ form.adminname(type="text", placeholder="Enter admin name", id="adminname") }}
-        {{ form.password.label }}
-        {{ form.password(type="password", placeholder="Enter password", id="password") }}
-        <button type="submit" formmethod="post">Log In</button>
-    </form>
+    <main class="main page__main">
+        <form class="card-form" method="POST" action="/adminlogin">
+            <div class="card-form__main-content">
+            <h2 class="card-form__title">Admin Login</h2>
+            {{ form.hidden_tag() }}
+            {{ form.adminname.label(class="card-form__label") }}
+            {{ form.adminname(class="card-form__input", type="text", placeholder="Enter admin name", id="adminname") }}
+            {{ form.password.label(class="card-form__label") }}
+            {{ form.password(class="card-form__input", type="password", placeholder="Enter password", id="password") }}
+            </div>
+            <div class="card-form__footer">
+                <button class="primary-btn" type="submit" formmethod="post">Login</button>
+            </div>
+        </form>
+    </main>
 {% endblock %}
