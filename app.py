@@ -227,7 +227,7 @@ def adminlogin():
 
 
 
-@app.route('/userlogin', methods =["GET", "POST"])
+@app.route('/login', methods =["GET", "POST"])
 def login():
     form = UserLoginForm()
 
@@ -236,6 +236,7 @@ def login():
         if user:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
+                flash("Login Successful!!")
                 return redirect(url_for('userdashboard'))
             else:
                 flash('Invalid credentials!!')
@@ -256,6 +257,7 @@ def user_registeration():
         db.session.add(user)
         db.session.commit()
         login_user(user)
+        flash("Registeratin Successful!!")
         return redirect(url_for('login'))
     return render_template('registeration.html', title='Registeration', form=form)
 
@@ -605,9 +607,8 @@ def deleteuser():
     db.session.delete(cur_user)
     db.session.commit()
     flash('User Deleted Successfully!')
-    logout_user()
     print("successfully deleted")
-    return redirect(url_for('admindashboard'))
+    return redirect(url_for('login'))
 
 
 
