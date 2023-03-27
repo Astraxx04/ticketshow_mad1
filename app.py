@@ -52,6 +52,9 @@ class Users(db.Model, UserMixin):
     user_id = db.Column(db.Integer(), primary_key = True)
     password = db.Column(db.String(20), nullable = False)
     usr_name = db.Column(db.String(30), nullable = False)
+    username = db.Column(db.String(30), nullable = False)
+    usr_phone = db.Column(db.Integer(), nullable = False)
+    usr_mail = db.Column(db.String(40), nullable = False)
     userType = db.Column(db.String(20), default = 'user')
 
     def get_id(self):
@@ -133,6 +136,9 @@ class UserRegisterationForm(FlaskForm):
     username = StringField('User Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     passwordconf = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match!')])
+    name = StringField()
+    usermail = StringField()
+    userphone = StringField()
 
 
 class NewVenueForm(FlaskForm):
@@ -180,6 +186,17 @@ class DataForm(FlaskForm):
     booking_show = StringField()
     booking_venue = StringField()
     search_items = StringField()
+
+
+class UserUpdateForm(FlaskForm):
+    name = StringField()
+    username = StringField()
+    usermail = StringField()
+    userphone = StringField()
+    existingpassword = StringField()
+    newuserpassword = StringField()
+    confuserpassword = StringField()
+
 
 #Routes--------------------------------------------------------------
 
@@ -235,7 +252,7 @@ def user_registeration():
 
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data)
-        user = Users(password=hashed_password, usr_name=form.username.data)
+        user = Users(password=hashed_password, usr_name=form.username.data, usr_phone=form.userphone.data, usr_mail=form.usermail.data, username=form.name.data)
         db.session.add(user)
         db.session.commit()
         login_user(user)
@@ -381,7 +398,29 @@ def admindashboard():
 @app.route('/profile', methods =["GET", "POST"])
 @login_required
 def profile():
-    return render_template('profile.html', title='Profile')
+    usrdet = Users.query.filter_by(user_id=current_user.user_id).first()
+    details = {"usr_name":usrdet.usr_name, "usr_phone":usrdet.usr_phone, "usr_mail":usrdet.usr_mail, "username":usrdet.username, "password":usrdet.password}
+    print(details)
+
+
+    form = UserUpdateForm()
+    if form.validate_on_submit():
+        if check_password_hash(usrdet.password, form.existingpassword.data):
+            if form.newuserpassword == form.confuserpassword.data:
+                hashed_password = generate_password_hash(form.newuserpassword.data)
+                user = Users(password=hashed_password, usr_name=form.username.data, usr_phone=form.userphone.data, usr_mail=form.usermail.data, username=form.name.data)
+                db.session.add(user)
+                db.session.commit()
+                login_user(user)
+                return redirect(url_for('userdashboard'))
+            else:
+                flash("Enter the same password!!")
+                return redirect(url_for('userdashboard'))
+        else:
+            flash("Enter the correct password!!")
+            return redirect(url_for('userdashboard'))
+
+    return render_template('profile.html', title='Profile', form=form, data=details)
 
 
 
@@ -554,6 +593,22 @@ def deletevenue():
     flash('Deleted Successfully!')
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
+
+
+
+@app.route('/deleteuser', methods =["GET", "POST"])
+@login_required
+def deleteuser():
+    us_id = current_user.user_id
+    print(us_id)
+    cur_user = Users.query.filter(Users.user_id==us_id).first()
+    db.session.delete(cur_user)
+    db.session.commit()
+    flash('User Deleted Successfully!')
+    logout_user()
+    print("successfully deleted")
+    return redirect(url_for('admindashboard'))
+
 
 
 @app.route('/logout')

@@ -27,8 +27,14 @@
     <h3>Register</h3>
     <form method="POST" action="/registeration">
         {{ form.hidden_tag() }}
+        {{ form.name.label }}
+        {{ form.name(type="text", placeholder="Enter name", id="uname") }}
         {{ form.username.label }}
-        {{ form.username(type="text", placeholder="Enter user name", id="user_name") }}
+        {{ form.username(type="text", placeholder="Enter user name", id="usrname") }}
+        {{ form.usermail.label }}
+        {{ form.usermail(type="mail", placeholder="Enter mail", id="usrmail") }}
+        {{ form.userphone.label }}
+        {{ form.userphone(type="number", placeholder="Enter phone number", id="usrphone") }}
         {{ form.password.label }}
         {{ form.password(type="password", placeholder="Enter password", id="userpassword") }}
         {{ form.passwordconf.label }}

@@ -185,3 +185,19 @@
     text-decoration: none;
     color: #ffffff;
 }
+
+.usericon{
+    width : 30%; 
+    background-color: rgba(255, 255, 255, 0.7); 
+    margin-top: 10px; 
+    border-radius:15px; 
+    padding: 5px;
+}
+
+.profilecont{
+    width : 40%; 
+    background-color: rgba(255, 255, 255, 0.7); 
+    margin-top: 10px; 
+    border-radius:15px; 
+    padding: 5px;
+}
