@@ -636,7 +636,6 @@ def rating():
         return redirect(url_for('userdashboard'))
 
     return render_template('rating.html', form=form)
-    pass
 
 @app.route('/logout')
 @login_required

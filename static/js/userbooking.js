@@ -20,14 +20,17 @@ for (let i = 0; i < numVenueToPrint; i++) {
 
 	vcard.innerHTML = `
 		<h1>${vcardDataItem.venue}: ${vcardDataItem.show}</h1>
-        <button class="rate-button" onclick="changepage('${vcardDataItem.venue}', '${vcardDataItem.show}')">Rate</button>
+        <button class="rate-button" id="RateButton${i}" onclick="changepage(this, '${vcardDataItem.venue}', '${vcardDataItem.show}'); this.disabled = true;">Rate</button>
 	`;
 
 	// Add the card element to the card container
 	venuesContainer.appendChild(vcard);
 }
 
-function changepage(venue, show){
+function changepage(element, venue, show){
+	// const btn = document.getElementById(element.id);
+	// btn.innerHTML = 'Rating submitted';
+	// btn.remove;
 	sessionStorage.setItem('rating_venue', venue);
 	sessionStorage.setItem('rating_show', show);
 	window.location.href = '/rate';
