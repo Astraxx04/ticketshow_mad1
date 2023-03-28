@@ -607,8 +607,17 @@ def summary():
         shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
         show=[]
         for sho in shows:
-            show.append({"name": sho.show_name, "time": sho.show_time, "showid": sho.show_id, "tag": sho.show_tag, "price": sho.show_price, "rating": sho.show_rating})
-        venu.append({"name": ven.venue_name, "cards": show, "place": ven.venue_place, "location": ven.venue_location, "capacity": ven.venue_capacity, "venueid": ven.venue_id})
+            rat = Ratings.query.filter_by(show_name=sho.show_name).all()
+            avg_rating = 0.0
+            count_rating = len(rat)
+            if count_rating > 0:
+                for r in rat:
+                    avg_rating += r.ratings
+                avg_rating = avg_rating/count_rating
+            else:
+                avg_rating = 0
+            show.append({"name": sho.show_name, "showid": sho.show_id, "rating": avg_rating})
+        venu.append({"name": ven.venue_name, "cards": show, "venueid": ven.venue_id})
     return render_template('summary.html', title='Admin Dashboard', data=venu)
 
 
