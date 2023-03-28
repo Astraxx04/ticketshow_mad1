@@ -656,17 +656,7 @@ def deletevenue():
 
 @app.route('/deleteuser', methods =["GET", "POST"])
 @login_required
-<<<<<<< HEAD
 def deleteuser():    
-=======
-def deleteuser():
-    user = Users.query.filter_by(user_id = current_user.user_id).first()
-    if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page!!")
-        logout_clear()
-        return redirect(url_for('index'))
-    
->>>>>>> 1ff47f6e30616aadb09d03b14f34f94e3e698758
     us_id = current_user.user_id
     # print(us_id)
     cur_user = Users.query.filter(Users.user_id==us_id).first()
