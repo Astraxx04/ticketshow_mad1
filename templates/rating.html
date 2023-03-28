@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block head %}    
+    <title>Rating</title>
+{% endblock %}
+
+{% block body %}	
+    <div id="rate">
+        <div class="rating"> 
+            <input name="stars" id="e5" type="radio" value="5"></a><label for="e5">☆</label> 
+            <input name="stars" id="e4" type="radio" value="4"></a><label for="e4">☆</label> 
+            <input name="stars" id="e3" type="radio" value="3"></a><label for="e3">☆</label> 
+            <input name="stars" id="e2" type="radio" value="2"></a><label for="e2">☆</label> 
+            <input name="stars" id="e1" type="radio" value="1"></a><label for="e1">☆</label>
+        </div>
+
+        <button type="button" onclick="displayRadioValue()">
+            Submit
+        </button>
+
+        <main class="main page__main">
+            <form class="card-form", id="rating_form", method="POST" action="/rate">
+                <div class="card-form__main-content">
+                {{ form.hidden_tag() }}
+                {{ form.show(class="card-form__input", type="hidden", id="show") }}
+                {{ form.venue(class="card-form__input", type="hidden", id="venue") }}
+                {{ form.rating(class="card-form__input", type="hidden", id="rating") }}
+                </div>
+            </form>
+        </main>
+    </div>
+
+<!-- 	
+	<div class="rating rating2"> 
+		 <a href="#5" title="Give 5 stars">★</a> 
+		 <a href="#4" title="Give 4 stars">★</a> 
+		 <a href="#3" title="Give 3 stars">★</a> 
+		 <a href="#2" title="Give 2 stars">★</a> 
+		 <a href="#1" title="Give 1 star"> ★</a>
+	</div> -->
+
+    <link rel="stylesheet" href="../static/rating.css">
+    <script src="../static/js/rating.js"></script>
+{% endblock %}

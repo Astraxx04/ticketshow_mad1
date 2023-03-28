@@ -106,7 +106,7 @@ class Bookings(db.Model):
         return "<Bookings %r%r%r>" % self.venue_id % self.show_id % self.booking_id
 
 class Booked(db.Model):
-    booked_id = db.Column(db.Integer(), primary_key = True)
+    booked_id = db.Column(db.Integer(), primary_key = True, autoincrement=True)
     show_name = db.Column(db.String(50), primary_key = True, nullable = False)
     venue_name = db.Column(db.String(50), primary_key = True, nullable = False)
     seats_booked = db.Column(db.Integer(), default = 0)
@@ -196,6 +196,11 @@ class UserUpdateForm(FlaskForm):
     existingpassword = StringField()
     newuserpassword = StringField()
     confuserpassword = StringField()
+
+class RatingForm(FlaskForm):
+    venue = StringField()
+    show = StringField()
+    rating = StringField()
 
 
 #Routes--------------------------------------------------------------
@@ -441,7 +446,9 @@ def ticketbooking():
             booking = Bookings(num_tickets=form.numseats.data, bvenue_id=venue_id, bshow_id=show_id, total_price=form.total.data, buser_id=current_user.user_id)
             db.session.add(booking)
             
-            booked = Booked(show_name=booking_show, venue_name=booking_venue, seats_booked=form.numseats.data)
+            #Variable to keep track of number of bookings
+            booked_count = len(Booked.query.all())+1
+            booked = Booked(show_name=booking_show, venue_name=booking_venue, seats_booked=form.numseats.data, booked_id=booked_count)
             db.session.add(booked)
             
             db.session.commit()
@@ -474,7 +481,7 @@ def ticketbooking():
 @app.route('/userbookings', methods =["GET", "POST"])
 @login_required
 def userbookings():
-    print(current_user.user_id)
+    # print(current_user.user_id)
     bookings = Bookings.query.filter(Bookings.buser_id==current_user.user_id)
     data = []
     for book in bookings:
@@ -612,6 +619,24 @@ def deleteuser():
     return redirect(url_for('login'))
 
 
+@app.route('/rate', methods =["GET", "POST"])
+@login_required
+def rating():
+    form = RatingForm()
+
+    if form.validate_on_submit():
+        venue = form.venue.data
+        show = form.show.data
+        rating_value = form.rating.data
+        userid = current_user.user_id
+        rating_count = len(Ratings.query.all())+1
+        rating = Ratings(ratings_id=rating_count, user_id=userid, show_name=show, venue_name=venue, ratings=rating_value)
+        db.session.add(rating)
+        db.session.commit()
+        flash("Your rating has been saved")
+        return redirect(url_for('userdashboard'))
+
+    return render_template('rating.html', form=form)
 
 @app.route('/logout')
 @login_required
