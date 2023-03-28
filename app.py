@@ -285,10 +285,11 @@ def userdashboard():
     if request.method == 'POST' and len(form_content)==1:
         pkey=1
         searchkey = request.form['searchitem']
+        print(searchkey)
         fvenuelist = []
         svenplace = Venues.query.filter(Venues.venue_place.ilike(searchkey)).all()
         svenloc = Venues.query.filter(Venues.venue_location.ilike(searchkey)).all()
-        venname = Venues.query.filter(Venues.venue_name.ilike(searchkey)).all()
+        svenname = Venues.query.filter(Venues.venue_name.ilike(searchkey)).all()
         sshotag = Shows.query.filter(Shows.show_tag.ilike(searchkey)).all()
         sshoname = Shows.query.filter(Shows.show_name.ilike(searchkey)).all()
 
@@ -317,7 +318,7 @@ def userdashboard():
             fvenuelist = venloc
 
         #To check for venue names related shows
-        elif venname :
+        elif svenname :
             venname=[]
             ven = Venues.query.filter(Venues.venue_name.ilike(searchkey)).all()
             for ven in sven:
@@ -667,11 +668,10 @@ def deletevenue():
 @login_required
 def deleteuser():    
     us_id = current_user.user_id
-    # print(us_id)
     cur_user = Users.query.filter(Users.user_id==us_id).first()
     db.session.delete(cur_user)
     db.session.commit()
-    flash('User Deleted Successfully!')
+    flash('User Deleted Successfully!!')
     print("successfully deleted")
     return redirect(url_for('login'))
 
