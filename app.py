@@ -518,6 +518,12 @@ def userbookings():
 @app.route('/newshow', methods =["GET", "POST"])
 @login_required
 def new_show():
+    user = Users.query.filter_by(user_id = current_user.user_id).first()
+    if not user.isAdmin():
+        flash("You do not have sufficient access rights for this page.")
+        logout_clear()
+        return redirect(url_for('index'))
+    
     form = NewShowForm()
 
     if form.validate_on_submit():
@@ -534,6 +540,12 @@ def new_show():
 @app.route('/newvenue', methods =["GET", "POST"])
 @login_required
 def new_venue():
+    user = Users.query.filter_by(user_id = current_user.user_id).first()
+    if not user.isAdmin():
+        flash("You do not have sufficient access rights for this page.")
+        logout_clear()
+        return redirect(url_for('index'))
+    
     form = NewVenueForm()
 
     if form.validate_on_submit():
@@ -549,6 +561,12 @@ def new_venue():
 @app.route('/updateshow', methods =["GET", "POST"])
 @login_required
 def updateshow():
+    user = Users.query.filter_by(user_id = current_user.user_id).first()
+    if not user.isAdmin():
+        flash("You do not have sufficient access rights for this page.")
+        logout_clear()
+        return redirect(url_for('index'))
+    
     form = UpdateShowForm()
 
     if form.validate_on_submit():
@@ -569,6 +587,12 @@ def updateshow():
 @app.route('/updatevenue', methods =["GET", "POST"])
 @login_required
 def updatevenue():
+    user = Users.query.filter_by(user_id = current_user.user_id).first()
+    if not user.isAdmin():
+        flash("You do not have sufficient access rights for this page.")
+        logout_clear()
+        return redirect(url_for('index'))
+    
     form = UpdateVenueForm()
     
     if form.validate_on_submit():
@@ -601,6 +625,12 @@ def summary():
 @app.route('/deleteshow', methods =["GET", "POST"])
 @login_required
 def deleteshow():
+    user = Users.query.filter_by(user_id = current_user.user_id).first()
+    if not user.isAdmin():
+        flash("You do not have sufficient access rights for this page.")
+        logout_clear()
+        return redirect(url_for('index'))
+    
     form = UpdateShowForm()
     sh_id = form.showid.data
     print(form.showid.data)
@@ -616,6 +646,12 @@ def deleteshow():
 @app.route('/deletevenue', methods =["GET", "POST"])
 @login_required
 def deletevenue():
+    user = Users.query.filter_by(user_id = current_user.user_id).first()
+    if not user.isAdmin():
+        flash("You do not have sufficient access rights for this page.")
+        logout_clear()
+        return redirect(url_for('index'))
+    
     form = UpdateVenueForm()
     ve_id = form.venueid.data
     print(form.venueid.data)
@@ -631,6 +667,12 @@ def deletevenue():
 @app.route('/deleteuser', methods =["GET", "POST"])
 @login_required
 def deleteuser():
+    user = Users.query.filter_by(user_id = current_user.user_id).first()
+    if not user.isAdmin():
+        flash("You do not have sufficient access rights for this page.")
+        logout_clear()
+        return redirect(url_for('index'))
+    
     us_id = current_user.user_id
     print(us_id)
     cur_user = Users.query.filter(Users.user_id==us_id).first()
