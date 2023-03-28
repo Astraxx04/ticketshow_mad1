@@ -711,8 +711,8 @@ def rating():
 @app.route('/logout')
 @login_required
 def logout():
-    flash("Logout Successful!!")
     logout_clear()
+    flash("Logout Successful!!")
     return redirect(url_for('index'))
 
 def logout_clear():
