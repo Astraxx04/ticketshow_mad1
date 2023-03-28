@@ -287,16 +287,16 @@ def userdashboard():
         searchkey = request.form['searchitem']
         print(searchkey)
         fvenuelist = []
-        svenplace = Venues.query.filter(Venues.venue_place.ilike(searchkey)).all()
-        svenloc = Venues.query.filter(Venues.venue_location.ilike(searchkey)).all()
-        svenname = Venues.query.filter(Venues.venue_name.ilike(searchkey)).all()
-        sshotag = Shows.query.filter(Shows.show_tag.ilike(searchkey)).all()
-        sshoname = Shows.query.filter(Shows.show_name.ilike(searchkey)).all()
+        svenplace = Venues.query.filter(Venues.venue_place.ilike(searchkey+'%')).all()
+        svenloc = Venues.query.filter(Venues.venue_location.ilike(searchkey+'%')).all()
+        svenname = Venues.query.filter(Venues.venue_name.ilike(searchkey+'%')).all()
+        sshotag = Shows.query.filter(Shows.show_tag.ilike(searchkey+'%')).all()
+        sshoname = Shows.query.filter(Shows.show_name.ilike(searchkey+'%')).all()
 
         #To check for place related shows
         if svenplace :
             venplace=[]
-            sven = Venues.query.filter(Venues.venue_place.ilike(searchkey)).all()
+            sven = Venues.query.filter(Venues.venue_place.ilike(searchkey+'%')).all()
             for ven in sven:
                 shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
                 show=[]
@@ -308,7 +308,7 @@ def userdashboard():
         #To check for location related shows
         elif svenloc :
             venloc=[]
-            sven = Venues.query.filter(Venues.venue_location.ilike(searchkey)).all()
+            sven = Venues.query.filter(Venues.venue_location.ilike(searchkey+'%')).all()
             for ven in sven:
                 shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
                 show=[]
@@ -320,7 +320,7 @@ def userdashboard():
         #To check for venue names related shows
         elif svenname :
             venname=[]
-            ven = Venues.query.filter(Venues.venue_name.ilike(searchkey)).all()
+            sven = Venues.query.filter(Venues.venue_name.ilike(searchkey+'%')).all()
             for ven in sven:
                 shows = Shows.query.filter(ven.venue_id==Shows.svenue_id).all()
                 show=[]
@@ -332,7 +332,7 @@ def userdashboard():
         #To check for tags related shows
         elif sshotag :
             shotag=[]
-            ssho = Shows.query.filter(Shows.show_tag.ilike(searchkey)).all()
+            ssho = Shows.query.filter(Shows.show_tag.ilike(searchkey+'%')).all()
             sven=[]
             for sho in ssho:
                 veid = Venues.query.filter(Venues.venue_id==sho.svenue_id).first()
@@ -348,7 +348,7 @@ def userdashboard():
         #To check for show name related shows
         elif sshoname :
             shoname=[]
-            ssho = Shows.query.filter(Shows.show_name.ilike(searchkey)).all()
+            ssho = Shows.query.filter(Shows.show_name.ilike(searchkey+'%')).all()
             sven=[]
             for sho in ssho:
                 veid = Venues.query.filter(Venues.venue_id==sho.svenue_id).first()
