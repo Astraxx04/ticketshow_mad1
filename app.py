@@ -252,7 +252,7 @@ def login():
                 flash('Invalid credentials!!')
                 return redirect(url_for('login'))
         else:
-            flash('User not found!')
+            flash('User not found!!')
     return render_template('user_login.html', title='User Login', form=form)
 
 
@@ -408,7 +408,7 @@ def userdashboard():
 def admindashboard():
     user = Users.query.filter_by(user_id = current_user.user_id).first()
     if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page.")
+        flash("You do not have sufficient access rights for this page!!")
         logout_clear()
         return redirect(url_for('index'))
     
@@ -474,7 +474,7 @@ def ticketbooking():
             db.session.add(booked)
             
             db.session.commit()
-            flash("Booking confirmed!")
+            flash("Booking confirmed!!")
             return redirect(url_for('userdashboard'))
         
         show_time = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_time
@@ -496,7 +496,7 @@ def ticketbooking():
     except Exception as e:
         # For Debugging purposes
         print(e)
-        flash('Something went wrong!')
+        flash('Something went wrong!!')
         return redirect(url_for('userdashboard'))
 
 
@@ -520,7 +520,7 @@ def userbookings():
 def new_show():
     user = Users.query.filter_by(user_id = current_user.user_id).first()
     if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page.")
+        flash("You do not have sufficient access rights for this page!!")
         logout_clear()
         return redirect(url_for('index'))
     
@@ -531,7 +531,7 @@ def new_show():
         show = Shows(show_name=form.showname.data, show_time=form.starttime.data, show_tag=form.tags.data, show_rating=form.ratings.data, show_price=form.price.data, svenue_id=venue_id)
         db.session.add(show)
         db.session.commit()
-        flash('Show Created Successfully!')
+        flash('Show Created Successfully!!')
         return redirect(url_for('admindashboard'))
     return render_template('new_show.html', title='New Show', form=form)
 
@@ -542,7 +542,7 @@ def new_show():
 def new_venue():
     user = Users.query.filter_by(user_id = current_user.user_id).first()
     if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page.")
+        flash("You do not have sufficient access rights for this page!!")
         logout_clear()
         return redirect(url_for('index'))
     
@@ -552,7 +552,7 @@ def new_venue():
         venue = Venues(venue_name=form.venuename.data, venue_place=form.venueplace.data, venue_location=form.venueloc.data, venue_capacity=form.venuecap.data)
         db.session.add(venue)
         db.session.commit()
-        flash('Venue Created Successfully!')
+        flash('Venue Created Successfully!!')
         return redirect(url_for('admindashboard'))
     return render_template('new_venue.html', title='New Venue', form=form)
 
@@ -563,7 +563,7 @@ def new_venue():
 def updateshow():
     user = Users.query.filter_by(user_id = current_user.user_id).first()
     if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page.")
+        flash("You do not have sufficient access rights for this page!!")
         logout_clear()
         return redirect(url_for('index'))
     
@@ -589,7 +589,7 @@ def updateshow():
 def updatevenue():
     user = Users.query.filter_by(user_id = current_user.user_id).first()
     if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page.")
+        flash("You do not have sufficient access rights for this page!!")
         logout_clear()
         return redirect(url_for('index'))
     
@@ -627,7 +627,7 @@ def summary():
 def deleteshow():
     user = Users.query.filter_by(user_id = current_user.user_id).first()
     if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page.")
+        flash("You do not have sufficient access rights for this page!!")
         logout_clear()
         return redirect(url_for('index'))
     
@@ -637,7 +637,7 @@ def deleteshow():
     show = Shows.query.filter(Shows.show_id==sh_id).first()
     db.session.delete(show)
     db.session.commit()
-    flash('Deleted Successfully!')
+    flash('Deleted Successfully!!')
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
 
@@ -648,7 +648,7 @@ def deleteshow():
 def deletevenue():
     user = Users.query.filter_by(user_id = current_user.user_id).first()
     if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page.")
+        flash("You do not have sufficient access rights for this page!!")
         logout_clear()
         return redirect(url_for('index'))
     
@@ -658,7 +658,7 @@ def deletevenue():
     venue = Venues.query.filter(Venues.venue_id==ve_id).first()
     db.session.delete(venue)
     db.session.commit()
-    flash('Deleted Successfully!')
+    flash('Deleted Successfully!!')
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
 
@@ -669,7 +669,7 @@ def deletevenue():
 def deleteuser():
     user = Users.query.filter_by(user_id = current_user.user_id).first()
     if not user.isAdmin():
-        flash("You do not have sufficient access rights for this page.")
+        flash("You do not have sufficient access rights for this page!!")
         logout_clear()
         return redirect(url_for('index'))
     
@@ -678,7 +678,7 @@ def deleteuser():
     cur_user = Users.query.filter(Users.user_id==us_id).first()
     db.session.delete(cur_user)
     db.session.commit()
-    flash('User Deleted Successfully!')
+    flash('User Deleted Successfully!!')
     print("successfully deleted")
     return redirect(url_for('login'))
 
@@ -697,7 +697,7 @@ def rating():
         rating = Ratings(ratings_id=rating_count, user_id=userid, show_name=show, venue_name=venue, ratings=rating_value)
         db.session.add(rating)
         db.session.commit()
-        flash("Your rating has been saved")
+        flash("Your rating has been saved!!")
         return redirect(url_for('userdashboard'))
 
     return render_template('rating.html', form=form)
