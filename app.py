@@ -36,12 +36,6 @@ def load_user(user_id):
 
 isAdmin = False
 
-ACCESS = {
-    'guest': 0,
-    'user': 1,
-    'admin': 2
-}
-
 #Models--------------------------------
 
 # class Admins(db.Model, UserMixin):
@@ -222,7 +216,7 @@ def adminlogin():
 
     if form.validate_on_submit():
         user = Users.query.filter_by(usr_name=form.adminname.data).first()
-        print(user.roles)
+        # print(user.roles)
         if user and Users.isAdmin(user):
             if user.password == form.password.data:
                 isAdmin = True
@@ -283,14 +277,12 @@ def userdashboard():
     form = DataForm()
     pkey = 0
     searchkey = ''
-    print(request.form.to_dict())
     form_content = request.form.to_dict()
 
     # The following line checks if the search function is called.
     # The form method type is POST and if user presses booking then form content will have 2 key-value pair which will be
     # venue and show name but incase of search function the form content will only have 1 pair that is the search item
     if request.method == 'POST' and len(form_content)==1:
-        print("IN")
         pkey=1
         searchkey = request.form['searchitem']
         fvenuelist = []
@@ -429,7 +421,7 @@ def admindashboard():
 def profile():
     usrdet = Users.query.filter_by(user_id=current_user.user_id).first()
     details = {"usr_name":usrdet.usr_name, "usr_phone":usrdet.usr_phone, "usr_mail":usrdet.usr_mail, "username":usrdet.username, "password":usrdet.password}
-    print(details)
+    # print(details)
 
 
     form = UserUpdateForm()
@@ -503,7 +495,6 @@ def ticketbooking():
 @app.route('/userbookings', methods =["GET", "POST"])
 @login_required
 def userbookings():
-    # print(current_user.user_id)
     bookings = Bookings.query.filter(Bookings.buser_id==current_user.user_id)
     data = []
     for book in bookings:
@@ -633,7 +624,6 @@ def deleteshow():
     
     form = UpdateShowForm()
     sh_id = form.showid.data
-    print(form.showid.data)
     show = Shows.query.filter(Shows.show_id==sh_id).first()
     db.session.delete(show)
     db.session.commit()
@@ -654,11 +644,11 @@ def deletevenue():
     
     form = UpdateVenueForm()
     ve_id = form.venueid.data
-    print(form.venueid.data)
+    # print(form.venueid.data)
     venue = Venues.query.filter(Venues.venue_id==ve_id).first()
     db.session.delete(venue)
     db.session.commit()
-    flash('Deleted Successfully!!')
+    flash('Deleted Successfully!')
     print("successfully deleted")
     return redirect(url_for('admindashboard'))
 
@@ -674,11 +664,11 @@ def deleteuser():
         return redirect(url_for('index'))
     
     us_id = current_user.user_id
-    print(us_id)
+    # print(us_id)
     cur_user = Users.query.filter(Users.user_id==us_id).first()
     db.session.delete(cur_user)
     db.session.commit()
-    flash('User Deleted Successfully!!')
+    flash('User Deleted Successfully!')
     print("successfully deleted")
     return redirect(url_for('login'))
 
@@ -697,7 +687,7 @@ def rating():
         rating = Ratings(ratings_id=rating_count, user_id=userid, show_name=show, venue_name=venue, ratings=rating_value)
         db.session.add(rating)
         db.session.commit()
-        flash("Your rating has been saved!!")
+        flash("Your rating has been saved")
         return redirect(url_for('userdashboard'))
 
     return render_template('rating.html', form=form)
@@ -705,8 +695,8 @@ def rating():
 @app.route('/logout')
 @login_required
 def logout():
-    flash("Logout Successful!!")
     logout_clear()
+    flash("Logout Successful!!")
     return redirect(url_for('index'))
 
 def logout_clear():
