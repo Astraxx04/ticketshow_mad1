@@ -53,7 +53,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(30), nullable = False)
     usr_phone = db.Column(db.Integer(), nullable = False)
     usr_mail = db.Column(db.String(40), nullable = False)
-    roles = db.Column(db.String(20), default = 'admin')
+    roles = db.Column(db.String(20), default = 'user')
 
     def get_id(self):
            return (self.user_id)
