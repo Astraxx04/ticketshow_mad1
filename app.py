@@ -106,7 +106,7 @@ class Bookings(db.Model):
         return "<Bookings %r%r%r>" % self.venue_id % self.show_id % self.booking_id
 
 class Booked(db.Model):
-    booked_id = db.Column(db.Integer(), primary_key = True, autoincrement=True)
+    booked_id = db.Column(db.Integer(), primary_key = True)
     show_name = db.Column(db.String(50), primary_key = True, nullable = False)
     venue_name = db.Column(db.String(50), primary_key = True, nullable = False)
     seats_booked = db.Column(db.Integer(), default = 0)
@@ -135,7 +135,7 @@ class UserLoginForm(FlaskForm):
 class UserRegisterationForm(FlaskForm):
     username = StringField('User Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    passwordconf = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match!')])
+    passwordconf = PasswordField('Confirm Password', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     usermail = StringField('User Mail', validators=[DataRequired()])
     userphone = StringField('User Phone', validators=[DataRequired()])
@@ -189,13 +189,13 @@ class DataForm(FlaskForm):
 
 
 class UserUpdateForm(FlaskForm):
-    name = StringField()
-    username = StringField()
-    usermail = StringField()
-    userphone = StringField()
-    existingpassword = StringField()
-    newuserpassword = StringField()
-    confuserpassword = StringField()
+    name = StringField('Name', validators=[DataRequired()])
+    username = StringField('User Name', validators=[DataRequired()])
+    usermail = StringField('User Mail', validators=[DataRequired()])
+    userphone = StringField('Phone Number', validators=[DataRequired()])
+    existingpassword = StringField('Existing Password', validators=[DataRequired()])
+    newuserpassword = StringField('New Password')
+    confuserpassword = StringField('Confirm New Password')
 
 class RatingForm(FlaskForm):
     venue = StringField()
@@ -257,13 +257,17 @@ def user_registeration():
     form = UserRegisterationForm()
 
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data)
-        user = Users(password=hashed_password, usr_name=form.username.data, usr_phone=form.userphone.data, usr_mail=form.usermail.data, username=form.name.data)
-        db.session.add(user)
-        db.session.commit()
-        login_user(user)
-        flash("Registeratin Successful!!")
-        return redirect(url_for('login'))
+        if form.password.data == form.passwordconf.data:
+            hashed_password = generate_password_hash(form.password.data)
+            user = Users(password=hashed_password, usr_name=form.username.data, usr_phone=form.userphone.data, usr_mail=form.usermail.data, username=form.name.data)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            flash("Registeratin Successful!!")
+            return redirect(url_for('login'))
+        else:
+            flash("Passwords do not match!!")
+            return redirect(url_for('user_registeration'))
     return render_template('registeration.html', title='Registeration', form=form)
 
 
@@ -413,19 +417,20 @@ def profile():
     form = UserUpdateForm()
     if form.validate_on_submit():
         if check_password_hash(usrdet.password, form.existingpassword.data):
-            if form.newuserpassword == form.confuserpassword.data:
+            if form.newuserpassword.data == form.confuserpassword.data:
                 hashed_password = generate_password_hash(form.newuserpassword.data)
                 user = Users(password=hashed_password, usr_name=form.username.data, usr_phone=form.userphone.data, usr_mail=form.usermail.data, username=form.name.data)
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
+                flash("Successfully Changed Data!!")
                 return redirect(url_for('userdashboard'))
             else:
                 flash("Enter the same password!!")
-                return redirect(url_for('userdashboard'))
+                return redirect(url_for('profile'))
         else:
             flash("Enter the correct password!!")
-            return redirect(url_for('userdashboard'))
+            return redirect(url_for('profile'))
 
     return render_template('profile.html', title='Profile', form=form, data=details)
 
