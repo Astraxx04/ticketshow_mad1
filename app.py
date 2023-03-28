@@ -36,12 +36,6 @@ def load_user(user_id):
 
 isAdmin = False
 
-ACCESS = {
-    'guest': 0,
-    'user': 1,
-    'admin': 2
-}
-
 #Models--------------------------------
 
 # class Admins(db.Model, UserMixin):
@@ -59,7 +53,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(30), nullable = False)
     usr_phone = db.Column(db.Integer(), nullable = False)
     usr_mail = db.Column(db.String(40), nullable = False)
-    roles = db.Column(db.String(20), default = 'user')
+    roles = db.Column(db.String(20), default = 'admin')
 
     def get_id(self):
            return (self.user_id)
@@ -694,10 +688,27 @@ def rating():
         rating_value = form.rating.data
         userid = current_user.user_id
         rating_count = len(Ratings.query.all())+1
-        rating = Ratings(ratings_id=rating_count, user_id=userid, show_name=show, venue_name=venue, ratings=rating_value)
-        db.session.add(rating)
-        db.session.commit()
-        flash("Your rating has been saved")
+        
+        show_id = (Shows.query.filter_by(show_name = show).first_or_404()).show_id
+        venue_id = (Venues.query.filter_by(venue_name = venue).first_or_404()).venue_id
+        rate_id = str(userid)+'.'+str(show_id)+'.'+str(venue_id)
+
+        existing_rate = Ratings.query.filter_by(ratings_id = rate_id).first()
+
+        if (existing_rate == None):
+            rating = Ratings(ratings_id=rate_id, user_id=userid, show_name=show, venue_name=venue, ratings=rating_value)
+            db.session.add(rating)
+            db.session.commit()
+            flash("Your rating has been saved")
+        else:
+            existing_rate.ratings_id = rate_id
+            existing_rate.user_id = userid
+            existing_rate.show_name = show
+            existing_rate.venue_name = venue
+            existing_rate.ratings = rating_value        
+            db.session.commit()
+            flash("Your rating has been updated")
+    
         return redirect(url_for('userdashboard'))
 
     return render_template('rating.html', form=form)
