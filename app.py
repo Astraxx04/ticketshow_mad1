@@ -213,6 +213,7 @@ def adminlogin():
 
     if form.validate_on_submit():
         user = Users.query.filter_by(usr_name=form.adminname.data).first()
+        print(user.roles)
         if user and Users.isAdmin(user):
             if user.password == form.password.data:
                 isAdmin = True
@@ -222,7 +223,7 @@ def adminlogin():
                 flash('Invalid credentials!!')
                 return redirect(url_for('adminlogin'))
         else:
-            flash('User not found!')
+            flash('Invalid User!!')
     return render_template('admin_login.html', title='Admin Login', form=form)
 
 
@@ -617,6 +618,7 @@ def deleteuser():
 def logout():
     session.pop('venue_name', None)
     session.pop('show_name', None)
+    flash("Logout Successful!!")
     logout_user()
     return redirect(url_for('index'))
 
