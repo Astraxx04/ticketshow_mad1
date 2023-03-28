@@ -279,7 +279,14 @@ def userdashboard():
     form = DataForm()
     pkey = 0
     searchkey = ''
-    if request.method == 'POST':
+    print(request.form.to_dict())
+    form_content = request.form.to_dict()
+
+    # The following line checks if the search function is called.
+    # The form method type is POST and if user presses booking then form content will have 2 key-value pair which will be
+    # venue and show name but incase of search function the form content will only have 1 pair that is the search item
+    if request.method == 'POST' and len(form_content)==1:
+        print("IN")
         pkey=1
         searchkey = request.form['searchitem']
         fvenuelist = []
