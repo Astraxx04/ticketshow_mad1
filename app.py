@@ -117,7 +117,7 @@ class Booked(db.Model):
 
 
 class Ratings(db.Model):
-    ratings_id = db.Column(db.Integer(), primary_key = True)
+    ratings_id = db.Column(db.String(20), primary_key = True)
     user_id = db.Column(db.Integer())
     show_name = db.Column(db.String(50), nullable = False)
     venue_name = db.Column(db.String(50), nullable = False)
