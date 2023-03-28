@@ -36,7 +36,11 @@ def load_user(user_id):
 
 isAdmin = False
 
-
+ACCESS = {
+    'guest': 0,
+    'user': 1,
+    'admin': 2
+}
 
 #Models--------------------------------
 
@@ -402,6 +406,12 @@ def userdashboard():
 @app.route('/admindashboard', methods =["GET", "POST"])
 @login_required
 def admindashboard():
+    user = Users.query.filter_by(user_id = current_user.user_id).first()
+    if not user.isAdmin():
+        flash("You do not have sufficient access rights for this page.")
+        logout_clear()
+        return redirect(url_for('index'))
+    
     venues = Venues.query.all()
     venu=[]
     for ven in venues:
@@ -653,13 +663,15 @@ def rating():
 @app.route('/logout')
 @login_required
 def logout():
-    session.pop('venue_name', None)
-    session.pop('show_name', None)
     flash("Logout Successful!!")
-    logout_user()
+    logout_clear()
     return redirect(url_for('index'))
 
-
+def logout_clear():
+    # session.pop('venue_name', None)
+    # session.pop('show_name', None)
+    session.clear()
+    logout_user()
 
 
 if __name__ == '__main__':
