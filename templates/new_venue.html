@@ -15,10 +15,10 @@
             <div class="usr">Admin Dashboard</div>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Summary</a>
+                    <a class="nav-link" href="{{ url_for('summary') }}">Summary</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../templates/admin_login.html">Logout</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                 </li>
             </ul>
         </div>
