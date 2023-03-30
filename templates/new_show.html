@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block head %}
-    <title>Bookings</title>
 {% endblock %}
 
 {% block body %}
@@ -23,7 +22,6 @@
             </ul>
         </div>
     </nav>
-
     
     <main class="main page__main">
         <form class="card-form" method="POST" action="/newshow">
@@ -40,28 +38,13 @@
             {{ form.tags(class="card-form__input", type="text", placeholder="Enter tags", id="show_tag") }}
             {{ form.price.label(class="card-form__label") }}
             {{ form.price(class="card-form__input", type="number", placeholder="Enter value", id="price", min="100") }}
-            <!-- {{ form.venue.label(class="card-form__label") }} -->
             {{ form.venue(class="card-form__input", type="hidden", placeholder="Enter the venue name", id="venue_name") }}
-        
-            
-
-
-
-            <!-- <label class="card-form__label" for="show_name">Show Name</label>
-            <input class="card-form__input" id="show_name" placeholder="Enter the show name" type="text" name="new_showname" />
-            <label class="card-form__label" for="show_rat">Ratings</label>
-            <input class="card-form__input" id="show_rat" placeholder="Enter ratings out of 5" type="number" min="0" max="5" name="new_showratings"/>
-            <label class="card-form__label" for="show_time_start">Start Timings</label>
-            <input class="card-form__input" id="show_time_start" placeholder="Enter the show time" type="time" name="new_showtime" />
-            <label class="card-form__label" for="show_tag">Tags</label>
-            <input class="card-form__input" id="show_tag" placeholder="Enter tags" type="text" name="new_showtag" />
-            <label class="card-form__label" for="price">Price</label>
-            <input class="card-form__input" id="price" placeholder="Enter value" type="number" min="100" name="new_showprice" /> -->
             </div>
             <div class="card-form__footer">
             <button class="primary-btn" type="submit" formmethod="post">Save</button>
             </div>
         </form>
     </main>
+    
     <script src="../static/js/new_show.js"></script>
 {% endblock %}

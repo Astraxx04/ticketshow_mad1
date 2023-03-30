@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block head %}
-    <title>Bookings</title>
 {% endblock %}
 
 {% block body %}
     <link rel="stylesheet" href="../static/new_show.css">
+    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -23,7 +23,6 @@
             </ul>
         </div>
     </nav>
-
     
     <main class="main page__main">
         <form class="card-form" method="POST" action="/updateshow">
@@ -41,7 +40,6 @@
             {{ form.price.label(class="card-form__label") }}
             {{ form.price(class="card-form__input", type="number", placeholder="Enter value", id="price", min="100") }}
             {{ form.showid(class="card-form__input", type="hidden", placeholder="Show id", id="show_id") }}
-            
             </div>
             <div class="card-form__footer">
             <button class="primary-btn" type="submit" formmethod="post">Save</button>
@@ -49,5 +47,6 @@
             </div>
         </form>
     </main>
+
     <script src="../static/js/updateshow.js"></script>
 {% endblock %}

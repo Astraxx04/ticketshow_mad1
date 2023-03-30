@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block head %}
-    <title>Bookings</title>
 {% endblock %}
 
 {% block body %}
     <link rel="stylesheet" href="../static/ticket_book.css">
+    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -26,7 +26,6 @@
             </ul>
         </div>
     </nav>
-
     
     <main class="main page__main">
         <form class="card-form", method="POST" action="/ticketbooking">
@@ -43,30 +42,12 @@
             {{ form.price(class="card-form__input", type="number", id="price", value=booking_detail['price'], readonly="True") }}
             {{ form.total.label(class="card-form__label") }}
             {{ form.total(class="card-form__input", type="number", id="total", value="0", readonly="True") }}
-            
-            
-
-            <!-- <label class="card-form__label" for="num_seats">Number</label>
-            <input class="card-form__input" id="num_seats" name="num_seats" placeholder="Enter the number of seats" type="number" min="0" onkeyup="tot_price()"/>
-            <label class="card-form__label" for="price">Price</label>
-            <input class="card-form__input" id="price" name="price" value="300" type="number" readonly/>
-            <label class="card-form__label" for="total">Total</label>
-            <input class="card-form__input" id="total" name="total" type="number" value="0" readonly/> -->
             </div>
             <div class="card-form__footer">
             <button class="primary-btn" type="submit">Confirm Booking</button>
             </div>
         </form>
     </main>
-    <script src="../static/js/ticket_book.js"></script>
-    <!-- <script>
-        function tot_price()
-        {
-            var seats = document.getElementById('num_seats').value;
-            var total = seats*document.getElementById('price').value;
-            document.getElementById('total').value = total;
-            console.log(total);
-        }
-    </script>  -->
 
+    <script src="../static/js/ticket_book.js"></script>
 {% endblock %}
