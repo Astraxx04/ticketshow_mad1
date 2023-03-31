@@ -22,7 +22,7 @@ A show ticket booking application made from python and flask.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/Astraxx04/ticketshow_mad1.git
 ```
 
 Go to the project directory

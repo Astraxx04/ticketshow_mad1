@@ -194,6 +194,14 @@ class RatingForm(FlaskForm):
     show = StringField()
     rating = StringField()
 
+# Admin creation -----------------------------------------------------------------------------
+
+# if not (Users.query.filter_by(roles='admin').first()):
+# print("New Admin created")
+# user = Users(password=generate_password_hash("admin123"), usr_name="admin", usr_phone=9876543210, usr_mail="admin@gmail.com", username="Admin")
+# db.session.add(user)
+# db.session.commit()
+# login_user(user)
 
 # Routes-------------------------------------------------------------------------------------
 
