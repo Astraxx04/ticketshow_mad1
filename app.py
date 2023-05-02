@@ -459,13 +459,20 @@ def ticketbooking():
         show_price = (Shows.query.filter_by(show_name = booking_show).first_or_404()).show_price
 
 
-        booked_seats = Booked.query.filter_by(show_name = booking_show).first()
+        booked_seats = Booked.query.filter_by(show_name = booking_show).all()
+        tot=0
+        for bb in booked_seats:
+            tot = tot + bb.seats_booked
+        print(tot)
         if (booked_seats == None):
             booked_seats = 0
         else:
-            booked_seats = booked_seats.seats_booked
+            booked_seats = tot
+        print(booked_seats)
         available_seats = total_seats - booked_seats
-
+        if available_seats==0:
+            flash("Bookings Full !!")
+            return redirect(url_for('userdashboard'))
         booking_detail = {'booking_venue':booking_venue, 'booking_show':booking_show, 'show_time':show_time, 'total_seats':total_seats, 'available_seats':available_seats, 'price':show_price}
         return render_template('ticket_book.html', title='Ticket Booking', form=form, booking_detail=booking_detail)
     except Exception as e:
